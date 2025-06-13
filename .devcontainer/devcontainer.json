@@ -1,0 +1,24 @@
+{
+  "name": "Next.js Dev Container",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "next",
+  "workspaceFolder": "/workspace/app",
+  "remoteUser": "node",
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/actionlint:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ]
+    }
+  }
+}
