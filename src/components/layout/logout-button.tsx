@@ -1,12 +1,12 @@
 "use client"
 
-import { logout } from "@/app/(auth)/_actions"
+import { resetApiKey } from "@/actions/api-key"
 import { LogOutIcon } from "lucide-react"
 import { useCallback } from "react"
 
 export const LogoutButton = () => {
   const onClick = useCallback(async () => {
-    await logout()
+    await resetApiKey()
   }, [])
 
   return (
