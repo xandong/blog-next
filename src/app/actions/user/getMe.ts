@@ -1,3 +1,5 @@
+"use server"
+
 import { api } from "@/lib/api"
 import { getSession } from "@/lib/session"
 import { User } from "@/types/generated"
@@ -13,6 +15,11 @@ export const getMe = async () => {
   })
 
   const data: User = await response.data
-  console.log({ data })
+
+  if (data.id) {
+    const session = await getSession()
+    session.user = data
+  }
+
   return data
 }
