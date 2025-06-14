@@ -31,13 +31,14 @@ export const ArticleItemPreview = ({ article }: { article: ArticleIndex }) => {
 
   return (
     <Link
-      href={`/article/${article.id}`}
+      href={`/articles/${article.id}`}
       className="group block w-3xl max-w-full"
     >
       <Card className="flex h-full flex-col sm:flex-row overflow-hidden transition-shadow duration-300 group-hover:shadow-lg p-0">
         {article.cover_image && (
           <div className="sm:w-2/5 relative h-48 sm:h-auto">
             <Image
+              aria-multiline
               src={article.cover_image}
               alt={`Capa do artigo: ${article.title}`}
               fill

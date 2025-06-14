@@ -1,35 +1,49 @@
-import Image from "next/image"
+"use client"
 
-import { getSession } from "@/lib/session"
+import { useMemo } from "react"
+import Image from "next/image"
+import Link from "next/link"
+
+import { User } from "@/types/generated"
 
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
+  MenubarSeparator,
   MenubarTrigger
 } from "../_ui/menubar"
 import { ToggleTheme } from "../misc/toggle-theme"
 import { LogoutButton } from "./logout-button"
 import { SignIn } from "./sign-in"
 
-export const Navbar = async () => {
-  const { user } = await getSession()
+export const Navbar = ({ user }: { user: User | undefined }) => {
+  const { firstNameFirstLetter, lastNameFirstLetter } = useMemo(() => {
+    const firstNameFirstLetter =
+      user?.name?.split(" ")[0].split("")[0] || "Usuário"
+    const lastNameFirstLetter = user?.name?.split(" ")[1].split("")[0] || ""
 
-  const firstNameFirstLetter =
-    user?.name?.split(" ")[0].split("")[0] || "Usuário"
-  const lastNameFirstLetter = user?.name?.split(" ")[1].split("")[0] || ""
+    return {
+      firstNameFirstLetter,
+      lastNameFirstLetter
+    }
+  }, [user])
 
-  const url =
-    user?.profile_image ||
-    `https://ui-avatars.com/api/?name=${firstNameFirstLetter}%20${lastNameFirstLetter}`
+  const url = useMemo(
+    () =>
+      user?.profile_image ||
+      `https://ui-avatars.com/api/?name=${firstNameFirstLetter}%20${lastNameFirstLetter}`,
+    [user, firstNameFirstLetter, lastNameFirstLetter]
+  )
 
   return (
     <nav>
-      <ul className="flex items-center gap-2">
+      <ul className="flex items-center gap-1">
+        <ToggleTheme />
+
         {user ? (
           <>
-            <li>{user.name || "Unknown"}</li>
             <Menubar className="bg-transparent border-none focus:bg-transparent p-0 rounded-full">
               <MenubarMenu>
                 <MenubarTrigger className="bg-transparent p-1 rounded-full">
@@ -42,7 +56,30 @@ export const Navbar = async () => {
                   />
                 </MenubarTrigger>
 
-                <MenubarContent className="mr-4">
+                <MenubarContent className="mr-4 max-w-56">
+                  <div className="p-2">
+                    <span className="text-wrap">Olá, {user.name}</span>
+                  </div>
+
+                  <MenubarSeparator />
+                  <MenubarItem>
+                    <Link href="/create">Criar Publicação</Link>
+                  </MenubarItem>
+
+                  <MenubarItem>
+                    <Link href="/me">Meus artigos</Link>
+                  </MenubarItem>
+
+                  <MenubarItem asChild>
+                    <Link href="/profile">Perfil</Link>
+                  </MenubarItem>
+
+                  <MenubarItem asChild>
+                    <Link aria-disabled href="#">
+                      Configurações
+                    </Link>
+                  </MenubarItem>
+
                   <MenubarItem>
                     <LogoutButton />
                   </MenubarItem>
@@ -53,8 +90,6 @@ export const Navbar = async () => {
         ) : (
           <SignIn />
         )}
-
-        <ToggleTheme />
       </ul>
     </nav>
   )

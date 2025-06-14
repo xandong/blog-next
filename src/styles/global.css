@@ -62,9 +62,9 @@ body {
 :root {
   --radius: 0.625rem;
 
-  --background: oklch(0.96 0.01 85);
+  --background: oklch(0.97 0.01 85);
   --foreground: oklch(0.18 0.02 270);
-  --card: oklch(0.98 0.01 85);
+  --card: oklch(0.99 0.01 85);
   --card-foreground: oklch(0.18 0.02 270);
   --popover: oklch(0.97 0.01 85);
   --popover-foreground: oklch(0.18 0.02 270);
@@ -105,8 +105,8 @@ body {
   --card-foreground: oklch(0.95 0.01 270);
   --popover: oklch(0.28 0.02 260);
   --popover-foreground: oklch(0.95 0.01 270);
-  --border: oklch(0.35 0.015 260 / 40%);
-  --input: oklch(0.3 0.01 260);
+  --border: oklch(34.569% 0.01796 272.237 / 0.4);
+  --input: oklch(32% 0.01002 260.753);
   --ring: oklch(0.55 0.05 260);
 
   --primary: oklch(0.7072 0.1679 242.04);

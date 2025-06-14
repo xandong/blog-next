@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 
 import { getSession } from "@/lib/session"
+import { privatePages } from "@/utils/routes"
 
 export async function saveApiKeyAction(
   formData: FormData
@@ -43,5 +44,7 @@ export async function logoutAction(): Promise<void> {
 
   session.destroy()
 
-  revalidatePath("/", "layout")
+  privatePages.forEach((page) => {
+    revalidatePath(page, "layout")
+  })
 }

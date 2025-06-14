@@ -1,6 +1,6 @@
 "use client"
 
-import { logoutAction } from "@/app/actions/session"
+import { logoutAction } from "@/app/_actions/session"
 import { LogOutIcon } from "lucide-react"
 import { useCallback } from "react"
 

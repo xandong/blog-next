@@ -1,4 +1,4 @@
-import { ArticlesApi, Configuration } from "@/types/generated"
+import { ArticlesApi, Configuration, UsersApi } from "@/types/generated"
 import axios from "axios"
 
 export const api = axios.create({
@@ -20,3 +20,4 @@ const configuration = new Configuration({
 })
 
 export const articlesApi = new ArticlesApi(configuration)
+export const usersApi = new UsersApi(configuration)

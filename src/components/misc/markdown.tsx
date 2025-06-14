@@ -99,7 +99,7 @@ export function Markdown({ markdownContent }: MarkdownProps) {
               target="_blank"
               href={props.href || ""}
               {...props}
-              className="text-blue-600 hover:underline dark:text-blue-400"
+              className="text-blue-600 hover:underline dark:text-blue-400 wrap-anywhere"
             />
           ),
           img: ({ alt = "", src }) => (
@@ -134,7 +134,8 @@ export function Markdown({ markdownContent }: MarkdownProps) {
               {...props}
               className="border-l-4 border-blue-500 pl-4 py-1 italic text-gray-600 dark:text-gray-400"
             />
-          )
+          ),
+          h2: ({ ...props }) => <h2 {...props} className="lg:text-xl text-lg" />
         }}
       >
         {markdownContent}

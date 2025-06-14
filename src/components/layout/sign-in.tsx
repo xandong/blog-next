@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod"
 
-import { saveApiKeyAction } from "@/app/actions/session"
+import { saveApiKeyAction } from "@/app/_actions/session"
 import { Button } from "../_ui/button"
 import { Input } from "../_ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "../_ui/popover"
