@@ -2,13 +2,13 @@
 
 import { articlesApi } from "@/lib/api"
 import { getSession } from "@/lib/session"
-import { ArticleShow } from "@/types/generated"
+import { Article } from "@/types/custom"
 
 export const getArticleByIdAction = async ({
   id
 }: {
   id: number
-}): Promise<{ article?: ArticleShow; error?: string }> => {
+}): Promise<{ article?: Article; error?: string }> => {
   const { apiKey } = await getSession()
 
   if (typeof id !== "number") {
@@ -22,7 +22,7 @@ export const getArticleByIdAction = async ({
       }
     })
 
-    return { article: response.data as ArticleShow }
+    return { article: response.data as unknown as Article }
   } catch (error) {
     console.error("Error fetching article:", error)
     return { error: "Erro ao buscar o artigo." }

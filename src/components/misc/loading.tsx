@@ -1,8 +1,10 @@
+import { Loader2 } from "lucide-react"
+
 export const Loading = () => {
   return (
     <div className="flex items-center justify-center w-full h-screen">
       <div className="flex flex-col items-center justify-center">
-        <div className="w-11 h-11 border-t-2 border-b-2 border-l-2 border-primary rounded-full animate-spin"></div>
+        <Loader2 className="animate-spin text-primary" size={32} />
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { CreateArticleForm } from "@/components/articles/create-article-form"
+import { UpsertArticleForm } from "@/components/articles/create-article-form"
 import { AppLayout } from "@/components/layout/app-layout"
 
 export default function Page() {
@@ -10,7 +10,7 @@ export default function Page() {
           Compartilhe seu conhecimento com a comunidade
         </h2>
 
-        <CreateArticleForm />
+        <UpsertArticleForm />
       </div>
     </AppLayout>
   )

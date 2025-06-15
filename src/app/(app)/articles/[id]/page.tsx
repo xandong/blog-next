@@ -1,7 +1,7 @@
 // app/article/[id]/page.tsx
 import Image from "next/image"
 
-import { getArticleByIdAction } from "@/app/_actions/articles/getArticleById"
+import { getArticleByIdAction } from "@/app/_actions/articles/get-article-by-id"
 
 import { AppLayout } from "@/components/layout/app-layout"
 import { AuthorCard } from "@/components/users/author-card"

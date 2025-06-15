@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
 import { Tag } from "@/types/generated"
-import { getTagsListAction } from "@/app/_actions/tags/getTagsList"
+import { getTagsListAction } from "@/app/_actions/tags/get-tags-list"
 
 import { Button } from "@/components/_ui/button"
 import {
@@ -24,6 +24,7 @@ import { Input } from "@/components/_ui/input"
 import Editor from "@/components/misc/editor"
 import { MultiSelect } from "@/components/misc/multi-select"
 import { useRouter } from "next/navigation"
+import { Article } from "@/types/custom"
 
 const schema = z.object({
   title: z.string(),
@@ -34,7 +35,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-export const CreateArticleForm = () => {
+export const UpsertArticleForm = ({ article }: { article?: Article }) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
@@ -43,10 +44,10 @@ export const CreateArticleForm = () => {
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: "",
-      coverImage: "",
-      tags: [],
-      content: ""
+      title: article?.title || "",
+      coverImage: article?.cover_image || "",
+      tags: article?.tag_list || [],
+      content: article?.body_markdown || ""
     }
   })
   const { handleSubmit, setValue } = form
@@ -97,8 +98,6 @@ export const CreateArticleForm = () => {
           published: true
         }
       })
-
-      console.log({ body })
 
       try {
         const response = await fetch("/api/proxy-articles", {

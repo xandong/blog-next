@@ -1,6 +1,6 @@
-import { getArticlesListAction } from "@/app/_actions/articles/getArticlesList"
+import { getArticlesListAction } from "@/app/_actions/articles/get-articles-list"
 
-import ArticleListInfinite from "@/components/articles/articles-pagination-infinite"
+import ArticlesPaginationInfinite from "@/components/articles/articles-pagination-infinite"
 import { CreateMinimalArticle } from "@/components/articles/create-minimal-article"
 import { AppLayout } from "@/components/layout/app-layout"
 import { getSession } from "@/lib/session"
@@ -26,7 +26,10 @@ export default async function Home() {
           </div>
         ) : (
           <div className="w-full flex justify-center">
-            <ArticleListInfinite initialArticles={articles} />
+            <ArticlesPaginationInfinite
+              initialArticles={articles}
+              currentUser={user}
+            />
           </div>
         )}
       </div>

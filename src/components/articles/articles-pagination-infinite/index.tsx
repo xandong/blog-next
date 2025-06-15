@@ -1,20 +1,24 @@
-// components/ArticleListInfinite.tsx
+// components/ArticlesPaginationInfinite.tsx
 "use client"
 
 import { useState, useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 
-import { getArticlesListAction } from "@/app/_actions/articles/getArticlesList"
+import { getArticlesListAction } from "@/app/_actions/articles/get-articles-list"
 
 import { ArticleList } from "../articles-list"
 import { Article } from "@/types/custom"
+import { User } from "@/types/generated"
+import { Loader2 } from "lucide-react"
 
 interface Props {
+  currentUser?: User | null
   initialArticles: Article[]
   // eslint-disable-next-line no-unused-vars
   request?: (params: { page: number }) => Promise<{ data?: Article[] }>
 }
-export default function ArticlePaginationInfinite({
+export default function ArticlesPaginationInfinite({
+  currentUser,
   initialArticles,
   request
 }: Props) {
@@ -31,7 +35,6 @@ export default function ArticlePaginationInfinite({
     if (inView && hasMore) {
       getArticlesRequest({ page: page })
         .then(({ data: newArticles }) => {
-          console.log({})
           if (!newArticles || newArticles.length === 0) setHasMore(false)
           else {
             setArticles((prev) => [...prev, ...newArticles])
@@ -44,10 +47,10 @@ export default function ArticlePaginationInfinite({
 
   return (
     <ul className="grid gap-6">
-      <ArticleList articles={articles} />
+      <ArticleList articles={articles} currentUser={currentUser} />
       {hasMore && (
         <li ref={ref} className="flex justify-center py-4">
-          <div className="w-11 h-11 border-t-2 border-b-2 border-l-2 border-primary rounded-full animate-spin"></div>
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </li>
       )}
     </ul>

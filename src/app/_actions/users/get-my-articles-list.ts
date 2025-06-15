@@ -17,7 +17,7 @@ export const getMyArticlesListAction = async ({
   try {
     const { apiKey } = await getSession()
 
-    const response = await usersApi.getUserArticles(page, perPage, {
+    const response = await usersApi.getUserAllArticles(page, perPage, {
       headers: {
         "api-key": apiKey,
         accept: "application/vnd.forem.api-v1+json"

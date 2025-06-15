@@ -1,7 +1,7 @@
 import { getSession } from "@/lib/session"
-import { getMyArticlesListAction } from "@/app/_actions/users/getMyArticlesList"
+import { getMyArticlesListAction } from "@/app/_actions/users/get-my-articles-list"
 
-import ArticleListInfinite from "@/components/articles/articles-pagination-infinite"
+import ArticlesPaginationInfinite from "@/components/articles/articles-pagination-infinite"
 import { CreateMinimalArticle } from "@/components/articles/create-minimal-article"
 import { AppLayout } from "@/components/layout/app-layout"
 import { AuthorCard } from "@/components/users/author-card"
@@ -39,7 +39,8 @@ export default async function Page() {
             </div>
           ) : (
             <div className="w-fit flex justify-center">
-              <ArticleListInfinite
+              <ArticlesPaginationInfinite
+                currentUser={user}
                 initialArticles={articles}
                 request={getMyArticlesListAction}
               />
