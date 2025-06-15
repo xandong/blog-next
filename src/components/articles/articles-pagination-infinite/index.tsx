@@ -4,21 +4,21 @@
 import { useState, useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 
-import { ArticleIndex } from "@/types/generated"
 import { getArticlesListAction } from "@/app/_actions/articles/getArticlesList"
 
 import { ArticleList } from "../articles-list"
+import { Article } from "@/types/custom"
 
 interface Props {
-  initialArticles: ArticleIndex[]
+  initialArticles: Article[]
   // eslint-disable-next-line no-unused-vars
-  request?: (params: { page: number }) => Promise<{ data: ArticleIndex[] }>
+  request?: (params: { page: number }) => Promise<{ data?: Article[] }>
 }
 export default function ArticlePaginationInfinite({
   initialArticles,
   request
 }: Props) {
-  const [articles, setArticles] = useState<ArticleIndex[]>(initialArticles)
+  const [articles, setArticles] = useState<Article[]>(initialArticles)
   const [page, setPage] = useState(2)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)

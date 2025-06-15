@@ -1,9 +1,10 @@
-import { ArticleIndex } from "@/types/generated"
+import { ArticleIndex, ArticleMe } from "@/types/generated"
 
 import { ArticleItemPreview } from "./item-preview"
 
+type Article = ArticleIndex & ArticleMe
 interface ArticleListProps {
-  articles: ArticleIndex[]
+  articles: Article[]
 }
 
 export const ArticleList = (params: ArticleListProps) => {

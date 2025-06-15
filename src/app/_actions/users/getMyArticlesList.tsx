@@ -2,7 +2,7 @@
 
 import { usersApi } from "@/lib/api"
 import { getSession } from "@/lib/session"
-import { ArticleMe } from "@/types/generated"
+import { Article } from "@/types/custom"
 
 export const getMyArticlesListAction = async ({
   page = 1,
@@ -11,7 +11,7 @@ export const getMyArticlesListAction = async ({
   page?: number
   perPage?: number
 }): Promise<{
-  data?: ArticleMe[]
+  data?: Article[]
   error?: string
 }> => {
   try {
@@ -24,7 +24,7 @@ export const getMyArticlesListAction = async ({
       }
     })
 
-    return { data: response.data }
+    return { data: response.data as Article[] }
   } catch (error) {
     console.error(error)
     return { error: "Erro ao buscar artigos" }

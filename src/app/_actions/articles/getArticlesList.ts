@@ -2,7 +2,8 @@
 
 import { getSession } from "@/lib/session"
 import { articlesApi } from "@/lib/api"
-import { ArticleIndex, GetArticlesStateEnum } from "@/types/generated"
+import { GetArticlesStateEnum } from "@/types/generated"
+import { Article } from "@/types/custom"
 
 interface GetArticlesListActionProps {
   page?: number
@@ -27,7 +28,7 @@ export const getArticlesListAction = async ({
   state = undefined,
   top = undefined
 }: GetArticlesListActionProps): Promise<{
-  data?: ArticleIndex[]
+  data?: Article[]
   error?: string
 }> => {
   try {
@@ -51,7 +52,7 @@ export const getArticlesListAction = async ({
       }
     )
 
-    return { data: response.data as ArticleIndex[] }
+    return { data: response.data as Article[] }
   } catch (error) {
     console.error(error)
     return { error: "Erro ao buscar artigos" }

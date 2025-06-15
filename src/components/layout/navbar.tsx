@@ -72,10 +72,6 @@ export const Navbar = ({ user }: { user: User | undefined }) => {
                   </MenubarItem>
 
                   <MenubarItem asChild>
-                    <Link href="/profile">Perfil</Link>
-                  </MenubarItem>
-
-                  <MenubarItem asChild>
                     <Link aria-disabled href="#">
                       Configurações
                     </Link>

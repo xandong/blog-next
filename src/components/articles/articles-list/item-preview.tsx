@@ -6,7 +6,7 @@ import {
   CardTitle
 } from "@/components/_ui/card"
 import { Badge } from "@/components/_ui/badge"
-import { ArticleIndex } from "@/types/generated"
+import { ArticleIndex, ArticleMe } from "@/types/generated"
 import Image from "next/image"
 import Link from "next/link"
 import { formatDistance } from "date-fns"
@@ -26,13 +26,15 @@ const ArticleMeta = ({
   </div>
 )
 
-export const ArticleItemPreview = ({ article }: { article: ArticleIndex }) => {
+type Article = ArticleIndex & ArticleMe
+
+export const ArticleItemPreview = ({ article }: { article: Article }) => {
   const createdAt = new Date(article.created_at || article.published_at)
 
   return (
     <Link
       href={`/articles/${article.id}`}
-      className="group block w-3xl max-w-full"
+      className="group block w-4xl max-w-full"
     >
       <Card className="flex h-full flex-col sm:flex-row overflow-hidden transition-shadow duration-300 group-hover:shadow-lg p-0">
         {article.cover_image && (

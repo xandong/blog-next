@@ -1,1 +1,1 @@
-export const privatePages = ["/create", "/me", "/profile"]
+export const privatePages = ["/create", "/me"]
