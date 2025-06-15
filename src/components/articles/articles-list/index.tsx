@@ -6,6 +6,8 @@ type Article = ArticleIndex & ArticleMe
 interface ArticleListProps {
   articles: Article[]
   currentUser?: User | null
+  // eslint-disable-next-line no-unused-vars
+  onUpdateArticle: (article: Article) => void
 }
 
 export const ArticleList = (params: ArticleListProps) => {
@@ -16,6 +18,7 @@ export const ArticleList = (params: ArticleListProps) => {
           key={article.id}
           article={article}
           currentUser={params.currentUser}
+          onUpdateArticle={params.onUpdateArticle}
         />
       ))}
     </ul>

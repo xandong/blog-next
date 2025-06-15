@@ -25,6 +25,7 @@ import Editor from "@/components/misc/editor"
 import { MultiSelect } from "@/components/misc/multi-select"
 import { useRouter } from "next/navigation"
 import { Article } from "@/types/custom"
+import { updateArticleAction } from "@/app/_actions/articles/update-article"
 
 const schema = z.object({
   title: z.string(),
@@ -88,6 +89,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
     async (data: FormData) => {
       schema.parse(data)
       setLoading(true)
+
       const body = JSON.stringify({
         article: {
           title: data.title,
@@ -100,28 +102,50 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
       })
 
       try {
-        const response = await fetch("/api/proxy-articles", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body
-        })
+        let response = undefined
+        if (article) {
+          const { success } = await updateArticleAction({
+            id: article.id.toString(),
+            data: {
+              article: {
+                title: data.title,
+                main_image: data.coverImage,
+                body_markdown: data.content,
+                tags: data.tags,
+                description: "",
+                published: true
+              }
+            }
+          })
 
-        const text = await response.text()
-        const json = JSON.parse(text)
+          if (success) {
+            toast.success("Artigo atualizado com sucesso!")
+            router.prefetch(`/articles/${article.id}`)
+            router.push(`/articles/${article.id}`)
+          }
+        } else {
+          response = await fetch("/api/proxy-articles", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body
+          })
 
-        if (json?.id) {
-          toast.success("Artigo criado com sucesso!")
-          router.prefetch(`/articles/${json.id}`)
-          router.push(`/articles/${json.id}`)
+          const text = await response.text()
+          const json = JSON.parse(text)
+
+          if (json?.id) {
+            toast.success("Artigo criado com sucesso!")
+            router.prefetch(`/articles/${json.id}`)
+            router.push(`/articles/${json.id}`)
+          }
         }
-        setLoading(false)
       } catch (error) {
         console.error(error)
       } finally {
         setLoading(false)
       }
     },
-    [router]
+    [router, article]
   )
 
   useEffect(() => {
@@ -136,7 +160,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
           src={form.watch("coverImage") || ""}
           alt="Preview da imagem"
           className="rounded-md object-cover"
-          width={300}
+          width={480}
           height={300}
         />
       )}

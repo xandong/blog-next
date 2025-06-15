@@ -78,7 +78,7 @@ export const AuthorCard = ({ username }: { username: string }) => {
           })}
         </p>
 
-        <CardFooter className="flex gap-8 pt-2 justify-end">
+        <CardFooter className="flex gap-8 pt-2 lg:justify-center justify-end">
           {author.website_url && (
             <Link
               href={author.website_url}

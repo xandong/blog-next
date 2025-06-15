@@ -45,9 +45,25 @@ export default function ArticlesPaginationInfinite({
     }
   }, [inView, hasMore, loading, page, request, getArticlesRequest])
 
+  const onUpdateArticle = (article: Article) => {
+    setArticles((prev) => {
+      const index = prev.findIndex((a) => a.id === article.id)
+      if (index !== -1) {
+        const newArticles = [...prev]
+        newArticles[index] = article
+        return newArticles
+      }
+      return prev
+    })
+  }
+
   return (
     <ul className="grid gap-6">
-      <ArticleList articles={articles} currentUser={currentUser} />
+      <ArticleList
+        articles={articles}
+        currentUser={currentUser}
+        onUpdateArticle={onUpdateArticle}
+      />
       {hasMore && (
         <li ref={ref} className="flex justify-center py-4">
           <Loader2 className="h-6 w-6 animate-spin text-primary" />

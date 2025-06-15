@@ -5,7 +5,13 @@ import Image from "next/image"
 import Link from "next/link"
 import { formatDistance } from "date-fns"
 import { ptBR } from "date-fns/locale/pt-BR"
-import { Heart, Clock, MoreVerticalIcon, EditIcon } from "lucide-react"
+import {
+  Heart,
+  Clock,
+  MoreVerticalIcon,
+  EditIcon,
+  UploadCloudIcon
+} from "lucide-react"
 
 import { ArticleIndex, ArticleMe, User } from "@/types/generated"
 
@@ -27,7 +33,7 @@ import {
   MenubarTrigger
 } from "@/components/_ui/menubar"
 import { ConfirmationDialog } from "@/components/misc/confirmation-dialog"
-import { unpublishArticleAction } from "@/app/_actions/articles/unpublish-article"
+import { updateArticleAction } from "@/app/_actions/articles/update-article"
 import { ArchiveBoxIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
@@ -49,11 +55,14 @@ type Article = ArticleIndex & ArticleMe
 interface ArticlePreviewProps {
   article: Article
   currentUser?: User | null
+  // eslint-disable-next-line no-unused-vars
+  onUpdateArticle: (article: Article) => void
 }
 
 export const ArticleItemPreview = ({
   article,
-  currentUser
+  currentUser,
+  onUpdateArticle
 }: ArticlePreviewProps) => {
   const [isUnpublishDialogOpen, setIsUnpublishDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -63,9 +72,6 @@ export const ArticleItemPreview = ({
   }, [article.user.username, currentUser])
 
   const isArchived = useMemo(() => {
-    // fazer um 'unpublish' de um article está desabilitado com apiKey
-    // return true
-
     return article.published === false
   }, [article.published])
 
@@ -76,21 +82,43 @@ export const ArticleItemPreview = ({
   const handleConfirmUnpublish = useCallback(async () => {
     setIsLoading(true)
     try {
-      const { error } = await unpublishArticleAction({
-        id: article.id.toString()
+      const { error } = await updateArticleAction({
+        id: article.id.toString(),
+        data: {
+          article: {
+            published: isArchived,
+            title: article.title,
+            description: article.description,
+            body_markdown: article.body_markdown,
+            tags: Array.isArray(article.tag_list)
+              ? article.tag_list
+              : [article.tag_list]
+          }
+        }
       })
 
       if (error) throw error
 
-      toast.success("Artigo arquivado com sucesso")
+      onUpdateArticle({ ...article, published: isArchived })
+      toast.success(
+        `Artigo ${isArchived ? "publicado" : "arquivado"} com sucesso`
+      )
     } catch (error) {
-      toast.error("Erro ao arquivar artigo")
+      toast.error(`Erro ao ${isArchived ? "publicar" : "arquivar"} artigo`)
       console.error({ error })
     } finally {
       setIsLoading(false)
       setIsUnpublishDialogOpen(false)
     }
-  }, [article.id])
+  }, [
+    article.id,
+    article.title,
+    article.description,
+    article.body_markdown,
+    article.tag_list,
+    onUpdateArticle,
+    isArchived
+  ])
 
   return (
     <>
@@ -158,21 +186,33 @@ export const ArticleItemPreview = ({
                       </MenubarTrigger>
 
                       <MenubarContent className="mr-6 max-w-24 w-full">
-                        <Link href={`/draft/${article.id}`}>
-                          <MenubarItem className="gap-0.5">
-                            <EditIcon className="mr-2 h-4 w-4" />
-                            <span>Editar</span>
-                          </MenubarItem>
-                        </Link>
-
-                        {!isArchived && (
+                        {isArchived && (
                           <MenubarItem
-                            onClick={() => setIsUnpublishDialogOpen(true)}
+                            onClick={handleConfirmUnpublish}
                             className="gap-0.5"
                           >
-                            <ArchiveBoxIcon className="mr-2 h-4 w-4 " />
-                            <span>Arquivar</span>
+                            <UploadCloudIcon className="mr-2 h-4 w-4 " />
+                            <span>Publicar</span>
                           </MenubarItem>
+                        )}
+
+                        {!isArchived && (
+                          <>
+                            <Link href={`/draft/${article.id}`}>
+                              <MenubarItem className="gap-0.5">
+                                <EditIcon className="mr-2 h-4 w-4" />
+                                <span>Editar</span>
+                              </MenubarItem>
+                            </Link>
+
+                            <MenubarItem
+                              onClick={() => setIsUnpublishDialogOpen(true)}
+                              className="gap-0.5"
+                            >
+                              <ArchiveBoxIcon className="mr-2 h-4 w-4 " />
+                              <span>Arquivar</span>
+                            </MenubarItem>
+                          </>
                         )}
                       </MenubarContent>
                     </MenubarMenu>
