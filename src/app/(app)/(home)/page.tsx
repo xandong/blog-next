@@ -1,6 +1,6 @@
 import { getArticlesListAction } from "@/app/_actions/articles/getArticlesList"
 
-import { ArticleList } from "@/components/articles/articles-list"
+import ArticleListInfinite from "@/components/articles/articles-list-infinite"
 import { CreateMinimalArticle } from "@/components/articles/create-minimal-article"
 import { AppLayout } from "@/components/layout/app-layout"
 import { getSession } from "@/lib/session"
@@ -21,7 +21,7 @@ export default async function Home() {
         )}
 
         <div className="w-full flex justify-center">
-          <ArticleList articles={articles} />
+          <ArticleListInfinite initialArticles={articles} />
         </div>
       </div>
     </AppLayout>

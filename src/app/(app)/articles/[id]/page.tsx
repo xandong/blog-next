@@ -2,7 +2,7 @@
 import Image from "next/image"
 
 import { getArticleByIdAction } from "@/app/_actions/articles/getArticleById"
-import { getUserByIdAction } from "@/app/_actions/user/getUserById"
+import { getUserByIdAction } from "@/app/_actions/users/getUserById"
 
 import { AppLayout } from "@/components/layout/app-layout"
 import { AuthorCard } from "@/components/users/author-card"
