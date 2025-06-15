@@ -26,26 +26,34 @@ export const getArticlesListAction = async ({
   username = undefined,
   state = undefined,
   top = undefined
-}: GetArticlesListActionProps): Promise<ArticleIndex[]> => {
-  const session = await getSession()
-  const apiKey = session.apiKey
+}: GetArticlesListActionProps): Promise<{
+  data?: ArticleIndex[]
+  error?: string
+}> => {
+  try {
+    const session = await getSession()
+    const apiKey = session.apiKey
 
-  const response = await articlesApi.getArticles(
-    page,
-    perPage,
-    tag,
-    tags,
-    tagsExclude,
-    username,
-    state,
-    top,
-    collectionId,
-    {
-      headers: {
-        "api-key": apiKey || ""
+    const response = await articlesApi.getArticles(
+      page,
+      perPage,
+      tag,
+      tags,
+      tagsExclude,
+      username,
+      state,
+      top,
+      collectionId,
+      {
+        headers: {
+          "api-key": apiKey || ""
+        }
       }
-    }
-  )
+    )
 
-  return response.data as ArticleIndex[]
+    return { data: response.data as ArticleIndex[] }
+  } catch (error) {
+    console.error(error)
+    return { error: "Erro ao buscar artigos" }
+  }
 }

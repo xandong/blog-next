@@ -1,33 +1,25 @@
-"use client"
+"use server"
 
-import { api } from "@/lib/api"
-import { getSession } from "@/lib/session"
-
-interface UploadImageActionProps {
-  file: File
-}
-
-export const uploadImageAction = async ({ file }: UploadImageActionProps) => {
+export const uploadImageAction = async ({ file }: { file: File }) => {
   try {
-    const { apiKey } = await getSession()
+    const res = await fetch(
+      `/api/s3/upload-url?fileName=${encodeURIComponent(file.name)}&fileType=${file.type}`
+    )
 
-    if (!apiKey) {
-      return { error: "Não autorizado." }
-    }
+    const { url, key } = await res.json()
 
-    const formData = new FormData()
-    formData.append("image[]", file)
-
-    const response = await api.post("/image_uploads", formData, {
-      baseURL: process.env.NEXT_PUBLIC_FOREM_BASE_URL,
+    await fetch(url, {
+      method: "PUT",
       headers: {
-        "api-key": apiKey
-      }
+        "Content-Type": file.type
+      },
+      body: file
     })
 
-    console.log({ data: response.data })
-    return { data: response.data }
-  } catch (error) {
-    console.error(error)
+    const fileUrl = `https://${process.env.NEXT_PUBLIC_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_REGION}.amazonaws.com/${key}`
+    return { fileUrl }
+  } catch (err) {
+    console.error("Erro no upload:", err)
+    throw err
   }
 }

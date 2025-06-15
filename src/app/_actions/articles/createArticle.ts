@@ -2,7 +2,7 @@
 
 import { api } from "@/lib/api"
 import { getSession } from "@/lib/session"
-import { ArticleCreate, ArticleShow } from "@/types/generated"
+import { ArticleCreate, ArticleShow } from "@/types/generated/api"
 
 export const createArticleAction = async ({
   article

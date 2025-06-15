@@ -1,13 +1,14 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { Loader2 } from "lucide-react"
+import Image from "next/image"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import { Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 import { Tag } from "@/types/generated"
-import { createArticleAction } from "@/app/_actions/articles/createArticle"
 import { getTagsListAction } from "@/app/_actions/tags/getTagsList"
 
 import { Button } from "@/components/_ui/button"
@@ -16,14 +17,17 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage
 } from "@/components/_ui/form"
 import { Input } from "@/components/_ui/input"
 import Editor from "@/components/misc/editor"
 import { MultiSelect } from "@/components/misc/multi-select"
+import { useRouter } from "next/navigation"
 
 const schema = z.object({
   title: z.string(),
+  content: z.string(),
   coverImage: z.string().url().optional(),
   tags: z.array(z.string())
 })
@@ -31,38 +35,86 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export const CreateArticleForm = () => {
-  const [content, setContent] = useState("")
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState<Tag[]>([])
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const [tagsList, setTagsList] = useState<Tag[]>([])
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       title: "",
       coverImage: "",
-      tags: []
+      tags: [],
+      content: ""
     }
   })
+  const { handleSubmit, setValue } = form
 
-  const { handleSubmit } = form
+  const handleUploadImage = useCallback(
+    async (file: File) => {
+      try {
+        setUploadingImage(true)
+
+        const formData = new FormData()
+        formData.append("file", file)
+        formData.append("fileName", file.name)
+        formData.append("fileType", file.type)
+
+        const response = await fetch(`/api/s3/upload`, {
+          method: "POST",
+          body: formData
+        })
+
+        if (!response.ok) throw new Error("Falha ao obter URL de upload")
+        const { url } = await response.json()
+
+        console.debug({ url })
+
+        setValue("coverImage", url)
+        toast.success("Imagem enviada com sucesso!")
+      } catch (err) {
+        toast.error("Erro ao enviar imagem.")
+        console.error(err)
+      } finally {
+        setUploadingImage(false)
+      }
+    },
+    [setValue]
+  )
 
   const onSubmit = useCallback(
     async (data: FormData) => {
       schema.parse(data)
       setLoading(true)
+      const body = JSON.stringify({
+        article: {
+          title: data.title,
+          main_image: data.coverImage,
+          body_markdown: data.content,
+          tags: data.tags,
+          description: "",
+          published: true
+        }
+      })
+
+      console.log({ body })
 
       try {
-        await createArticleAction({
-          article: {
-            title: data.title,
-            main_image: data.coverImage,
-            body_markdown: content,
-            description: "",
-            tags: selectedTags,
-            published: true
-          }
+        const response = await fetch("/api/proxy-articles", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body
         })
+
+        const text = await response.text()
+        const json = JSON.parse(text)
+
+        if (json?.id) {
+          toast.success("Artigo criado com sucesso!")
+          router.prefetch(`/articles/${json.id}`)
+          router.push(`/articles/${json.id}`)
+        }
         setLoading(false)
       } catch (error) {
         console.error(error)
@@ -70,30 +122,91 @@ export const CreateArticleForm = () => {
         setLoading(false)
       }
     },
-    [content, selectedTags]
+    [router]
   )
 
   useEffect(() => {
-    getTagsListAction().then(({ tags }) => tags && setTags(tags))
+    getTagsListAction().then(({ tags }) => tags && setTagsList(tags))
   }, [])
 
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-4">
-      <MultiSelect
-        maxSelections={4}
-        label="Selecione até 4 tags"
-        list={tags.map((tag) => ({
-          value: tag.id.toString(),
-          label: tag.name
-        }))}
-        onChange={(e) => setSelectedTags(e)}
-      />
+    <div className="w-full flex flex-col items-center justify-center gap-4 mt-4">
+      {form.watch("coverImage") && (
+        <Image
+          src={form.watch("coverImage") || ""}
+          alt="Preview da imagem"
+          className="rounded-md object-cover"
+          width={300}
+          height={300}
+        />
+      )}
 
       <Form {...form}>
         <form
           className="space-y-4 w-full max-w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
+          <FormItem>
+            <FormLabel htmlFor="cover-image">
+              Imagem destacada do artigo
+            </FormLabel>
+            <FormControl>
+              <Input
+                id="cover-image"
+                className="bg-background border border-border rounded-sm box-border pt-1.5"
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  handleUploadImage(file)
+                }}
+              />
+            </FormControl>
+          </FormItem>
+
+          {/* <FormField
+            shouldUnregister
+            name="coverImage"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="URL pública da imagem de capa (opcional)"
+                    className="text-sm"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          /> */}
+
+          <FormField
+            name="tags"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <MultiSelect
+                    {...field}
+                    maxSelections={4}
+                    label="Selecione até 4 tags"
+                    list={tagsList.map((tag) => ({
+                      value: tag.name,
+                      label: tag.name,
+                      bgColor: tag.bg_color_hex,
+                      color: tag.text_color_hex
+                    }))}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             name="title"
             control={form.control}
@@ -114,27 +227,25 @@ export const CreateArticleForm = () => {
           />
 
           <FormField
-            shouldUnregister
-            name="coverImage"
+            name="content"
             control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="URL pública da imagem de capa (opcional)"
-                    className="text-sm"
-                  />
+                  <Editor {...field} />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Editor onChange={setContent} value={content} />
-
           <Button type="submit" className="w-full">
-            {loading ? <Loader2 className="animate-spin" /> : "Publicar"}
+            {loading || uploadingImage ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Publicar"
+            )}
           </Button>
         </form>
       </Form>

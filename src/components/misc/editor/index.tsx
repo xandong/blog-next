@@ -1,5 +1,6 @@
 "use client"
 
+import { forwardRef, useEffect } from "react"
 import dynamic from "next/dynamic"
 import "react-quill/dist/quill.snow.css"
 import hljs from "highlight.js"
@@ -8,6 +9,7 @@ import typescript from "highlight.js/lib/languages/typescript"
 import python from "highlight.js/lib/languages/python"
 import css from "highlight.js/lib/languages/css"
 import html from "highlight.js/lib/languages/xml"
+import { Loader2 } from "lucide-react"
 
 hljs.registerLanguage("javascript", javascript)
 hljs.registerLanguage("typescript", typescript)
@@ -20,7 +22,14 @@ const ReactQuill = dynamic(
     const { default: RQ } = await import("react-quill")
     return RQ
   },
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex justify-center h-10">
+        <Loader2 className="animate-spin text-foreground" />
+      </div>
+    )
+  }
 )
 
 const modules = {
@@ -50,25 +59,34 @@ const formats = [
   "image"
 ]
 
-export default function Editor({
-  value,
-  onChange
-}: {
+export type EditorProps = {
   value: string
   // eslint-disable-next-line no-unused-vars
   onChange: (v: string) => void
-}) {
-  return (
-    <div className="bg-background border-1 border-border rounded-lg overflow-hidden">
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={onChange}
-        modules={modules}
-        formats={formats}
-        placeholder="Escreva o conteúdo aqui..."
-        className="min-h-56 text-gray-800 dark:text-gray-100"
-      />
-    </div>
-  )
 }
+
+const Editor = forwardRef<HTMLDivElement, EditorProps>(
+  ({ value, onChange }, ref) => {
+    useEffect(() => {
+      return () => {}
+    }, [])
+
+    return (
+      <div ref={ref} className="bg-background rounded-lg">
+        <ReactQuill
+          theme="snow"
+          value={value}
+          onChange={onChange}
+          modules={modules}
+          formats={formats}
+          placeholder="Escreva o conteúdo aqui..."
+          className="min-h-56 text-gray-800 dark:text-gray-100"
+        />
+      </div>
+    )
+  }
+)
+
+Editor.displayName = "Editor"
+
+export default Editor

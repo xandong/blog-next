@@ -27,7 +27,7 @@ const ArticleMeta = ({
 )
 
 export const ArticleItemPreview = ({ article }: { article: ArticleIndex }) => {
-  const createdAt = new Date(article.created_at)
+  const createdAt = new Date(article.created_at || article.published_at)
 
   return (
     <Link

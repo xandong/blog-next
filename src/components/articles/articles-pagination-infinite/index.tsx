@@ -11,23 +11,28 @@ import { ArticleList } from "../articles-list"
 
 interface Props {
   initialArticles: ArticleIndex[]
+  // eslint-disable-next-line no-unused-vars
+  request?: (params: { page: number }) => Promise<{ data: ArticleIndex[] }>
 }
-
-export default function ArticleListInfinite({ initialArticles }: Props) {
+export default function ArticlePaginationInfinite({
+  initialArticles,
+  request
+}: Props) {
   const [articles, setArticles] = useState<ArticleIndex[]>(initialArticles)
   const [page, setPage] = useState(2)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
 
   const { ref, inView } = useInView()
-
+  const getArticlesRequest = request || getArticlesListAction
   useEffect(() => {
     if (loading) return
 
     if (inView && hasMore) {
-      getArticlesListAction({ page: page })
-        .then((newArticles: ArticleIndex[]) => {
-          if (newArticles.length === 0) setHasMore(false)
+      getArticlesRequest({ page: page })
+        .then(({ data: newArticles }) => {
+          console.log({})
+          if (!newArticles || newArticles.length === 0) setHasMore(false)
           else {
             setArticles((prev) => [...prev, ...newArticles])
             setPage((p) => p + 1)
@@ -35,7 +40,7 @@ export default function ArticleListInfinite({ initialArticles }: Props) {
         })
         .finally(() => setLoading(false))
     }
-  }, [inView, hasMore, loading, page])
+  }, [inView, hasMore, loading, page, request, getArticlesRequest])
 
   return (
     <ul className="grid gap-6">
