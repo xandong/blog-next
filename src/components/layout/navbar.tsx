@@ -48,6 +48,7 @@ export const Navbar = ({ user }: { user: User | undefined }) => {
               <MenubarMenu>
                 <MenubarTrigger className="bg-transparent p-1 rounded-full">
                   <Image
+                    loading="lazy"
                     src={url}
                     alt={user.name || "User Avatar"}
                     width={32}

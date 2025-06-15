@@ -14,12 +14,37 @@ import {
   CardFooter,
   CardHeader
 } from "@/components/_ui/card"
+import { useEffect, useState } from "react"
+import { getUserByIdAction } from "@/app/_actions/users/getUserById"
+import { Skeleton } from "@/components/_ui/skeleton"
 
-export const AuthorCard = ({ author }: { author: User }) => {
+export const AuthorCard = ({ username }: { username: string }) => {
+  const [loading, setLoading] = useState(true)
+  const [author, setAuthor] = useState<User | null>(null)
+
+  useEffect(() => {
+    if (author) return
+
+    getUserByIdAction({ username: username })
+      .then(({ data }) => {
+        if (data) {
+          setAuthor(data)
+        }
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [author, username])
+
+  if (loading) return <AuthorCardSkeleton />
+
+  if (!author) return null
+
   return (
     <Card className="w-full h-fit">
       <CardHeader className="flex flex-col items-center text-center">
         <Image
+          loading="lazy"
           src={author.profile_image}
           alt={author.name}
           width={80}
@@ -94,5 +119,27 @@ export const AuthorCard = ({ author }: { author: User }) => {
         </CardFooter>
       </CardContent>
     </Card>
+  )
+}
+
+export const AuthorCardSkeleton = () => {
+  return (
+    <div className="w-full h-72 bg-card rounded-lg p-4 py-6">
+      <div className="flex flex-col items-center text-center">
+        <Skeleton className="w-20 h-20 rounded-full" />
+      </div>
+
+      <div className="flex flex-col gap-2 mt-6 items-center">
+        <Skeleton className="w-[60%] h-6" />
+        <Skeleton className="w-full h-6" />
+        <Skeleton className="w-full h-6" />
+      </div>
+
+      <div className="mt-4 flex gap-6 justify-center">
+        <Skeleton className="w-10 h-10 rounded-full" />
+        <Skeleton className="w-10 h-10 rounded-full" />
+        <Skeleton className="w-10 h-10 rounded-full" />
+      </div>
+    </div>
   )
 }

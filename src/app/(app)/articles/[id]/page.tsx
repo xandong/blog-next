@@ -2,7 +2,6 @@
 import Image from "next/image"
 
 import { getArticleByIdAction } from "@/app/_actions/articles/getArticleById"
-import { getUserByIdAction } from "@/app/_actions/users/getUserById"
 
 import { AppLayout } from "@/components/layout/app-layout"
 import { AuthorCard } from "@/components/users/author-card"
@@ -27,7 +26,6 @@ export default async function Page({ params }: PageProps) {
       </AppLayout>
     )
   }
-  const ownerUser = await getUserByIdAction({ username: article.user.username })
 
   return (
     <AppLayout>
@@ -50,6 +48,7 @@ export default async function Page({ params }: PageProps) {
             {article.cover_image && (
               <div className="my-6">
                 <Image
+                  loading="lazy"
                   src={article.cover_image}
                   alt={article.title}
                   width={800}
@@ -66,7 +65,9 @@ export default async function Page({ params }: PageProps) {
         </Card>
 
         <div className="lg:sticky lg:top-20 w-full lg:max-w-72">
-          {ownerUser.data && <AuthorCard author={ownerUser.data} />}
+          {article.user.username && (
+            <AuthorCard username={article.user.username} />
+          )}
         </div>
       </div>
     </AppLayout>

@@ -38,6 +38,7 @@ export const ArticleItemPreview = ({ article }: { article: ArticleIndex }) => {
         {article.cover_image && (
           <div className="sm:w-2/5 relative h-48 sm:h-auto">
             <Image
+              loading="lazy"
               aria-multiline
               src={article.cover_image}
               alt={`Capa do artigo: ${article.title}`}
@@ -53,6 +54,7 @@ export const ArticleItemPreview = ({ article }: { article: ArticleIndex }) => {
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                 <Image
+                  loading="lazy"
                   src={article.user.profile_image_90 || ""}
                   alt={article.user.name || ""}
                   width={32}

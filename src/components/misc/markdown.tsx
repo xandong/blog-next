@@ -16,7 +16,8 @@ interface CodepenHtml extends Literal {
 }
 
 const remarkCodepenPlugin: Plugin = () => {
-  return (tree) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (tree: any) => {
     visit(tree, "paragraph", (node: Paragraph) => {
       const { children } = node
 
@@ -104,6 +105,7 @@ export function Markdown({ markdownContent }: MarkdownProps) {
           ),
           img: ({ alt = "", src }) => (
             <Image
+              loading="lazy"
               src={src || ""}
               alt={alt}
               width={800}

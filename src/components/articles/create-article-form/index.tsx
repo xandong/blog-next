@@ -133,6 +133,7 @@ export const CreateArticleForm = () => {
     <div className="w-full flex flex-col items-center justify-center gap-4 mt-4">
       {form.watch("coverImage") && (
         <Image
+          loading="lazy"
           src={form.watch("coverImage") || ""}
           alt="Preview da imagem"
           className="rounded-md object-cover"
