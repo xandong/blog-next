@@ -22,11 +22,14 @@
     }
   },
   "include": [
+    "src/global.d.ts",
+    "src/**/*",
     ".jest/setup.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/app/(app)/not-found.js"
   ],
   "exclude": ["node_modules"]
 }
