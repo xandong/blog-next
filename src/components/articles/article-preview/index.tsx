@@ -110,15 +110,7 @@ export const ArticleItemPreview = ({
       setIsLoading(false)
       setIsUnpublishDialogOpen(false)
     }
-  }, [
-    article.id,
-    article.title,
-    article.description,
-    article.body_markdown,
-    article.tag_list,
-    onUpdateArticle,
-    isArchived
-  ])
+  }, [article, isArchived, onUpdateArticle])
 
   return (
     <>
