@@ -5,7 +5,7 @@
   "scripts": {
     "generate:types": "openapi-generator-cli generate -i openapi/forem.yaml -g typescript-axios -o src/types/generated",
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run generate:types && next build",
     "test": "jest --passWithNoTests --maxWorkers=50%",
     "test:watch": "jest --watch --passWithNoTests --maxWorkers=25%",
     "test:ci": "jest --runInBand",
