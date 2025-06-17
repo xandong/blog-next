@@ -61,7 +61,13 @@ export default function ArticlesPaginationInfinite({
       .then(({ data: newArticles }) => {
         if (!newArticles || newArticles.length === 0) setHasMore(false)
         else {
-          setArticles((prev) => [...prev, ...newArticles])
+          setArticles((prev) => {
+            const newArticlesSet = new Set(prev.map((a) => a.id))
+            const newArticlesFiltered = newArticles.filter(
+              (a) => !newArticlesSet.has(a.id)
+            )
+            return [...prev, ...newArticlesFiltered]
+          })
           setPage((p) => p + 1)
         }
       })

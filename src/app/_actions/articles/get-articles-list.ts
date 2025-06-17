@@ -19,7 +19,7 @@ interface GetArticlesListActionProps {
 
 export const getArticlesListAction = async ({
   page = 1,
-  perPage = 20
+  perPage = 30
 }: GetArticlesListActionProps): Promise<{
   data?: Article[]
   error?: string

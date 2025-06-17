@@ -1,7 +1,7 @@
 "use client"
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { SearchIcon } from "lucide-react"
+import { SearchIcon, XIcon } from "lucide-react"
 import { useDebounce } from "use-debounce"
 
 import { Article } from "@/types/custom"
@@ -46,7 +46,18 @@ export const SearchComponent = ({
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Pesquise pelos assuntos que mais lhe interessam"
-          endIcon={<SearchIcon size={20} color="gray" />}
+          endIcon={
+            searchValue !== "" ? (
+              <button
+                onClick={() => setSearchValue("")}
+                className="flex items-center justify-center"
+              >
+                <XIcon size={20} color="gray" />
+              </button>
+            ) : (
+              <SearchIcon size={20} color="gray" />
+            )
+          }
         />
       </div>
     </div>

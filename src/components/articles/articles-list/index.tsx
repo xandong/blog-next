@@ -15,7 +15,7 @@ export const ArticleList = (params: ArticleListProps) => {
     <ul className="grid grid-cols-1 gap-6">
       {params.articles.map((article) => (
         <ArticleItemPreview
-          key={article.id}
+          key={`${article.id}${article.slug}`}
           article={article}
           currentUser={params.currentUser}
           onUpdateArticle={params.onUpdateArticle}
