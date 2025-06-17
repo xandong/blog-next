@@ -14,15 +14,16 @@ interface HomeProps {
 }
 
 export const Home = ({ initialArticles, user }: HomeProps) => {
+  const [articles, setArticles] = useState(initialArticles)
+  const [filteredArticles, setFilteredArticles] = useState(articles)
+
   const isEmpty = useMemo(
     () => !initialArticles || initialArticles.length === 0,
     [initialArticles]
   )
-  const [articles, setArticles] = useState(initialArticles)
-  const [filteredArticles, setFilteredArticles] = useState(articles)
 
   return (
-    <div className="w-full flex flex-col items-center mt-2">
+    <div className="w-full flex flex-col items-center my-6">
       <SearchComponent
         setArticles={setFilteredArticles}
         initialArticles={articles}

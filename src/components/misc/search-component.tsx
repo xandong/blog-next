@@ -10,9 +10,11 @@ import { Input } from "../_ui/input"
 interface SearchComponentProps {
   setArticles: Dispatch<SetStateAction<Article[]>>
   initialArticles: Article[]
+  label?: string
 }
 
 export const SearchComponent = ({
+  label,
   setArticles,
   initialArticles
 }: SearchComponentProps) => {
@@ -45,7 +47,9 @@ export const SearchComponent = ({
         <Input
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Pesquise pelos assuntos que mais lhe interessam"
+          placeholder={
+            label ? label : "Pesquise pelos assuntos que mais lhe interessam"
+          }
           endIcon={
             searchValue !== "" ? (
               <button
