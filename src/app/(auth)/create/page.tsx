@@ -11,7 +11,7 @@ export default function Page() {
 
       <div className="flex flex-col items-start w-full max-w-5xl">
         <h1 className="text-3xl font-bold">Crie um Artigo</h1>
-        <h2 className="text-xl font- mb-4 text-muted-foreground">
+        <h2 className="text-xl mb-4 text-muted-foreground">
           Compartilhe seu conhecimento com a comunidade
         </h2>
 
