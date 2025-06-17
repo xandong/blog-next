@@ -36,6 +36,7 @@ import { ConfirmationDialog } from "@/components/misc/confirmation-dialog"
 import { updateArticleAction } from "@/app/_actions/articles/update-article"
 import { ArchiveBoxIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/_ui/avatar"
 
 const ArticleMeta = ({
   icon: Icon,
@@ -135,14 +136,21 @@ export const ArticleItemPreview = ({
           <CardHeader>
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                <Image
-                  loading="lazy"
-                  src={article.user.profile_image_90 || ""}
-                  alt={article.user.name || ""}
-                  width={32}
-                  height={32}
-                  className="rounded-full"
-                />
+                <Avatar>
+                  <AvatarImage
+                    src={article.user.profile_image || ""}
+                    alt={`Capa do artigo: ${article.user.name}`}
+                  />
+                  <AvatarFallback>
+                    {article.user?.name?.charAt(0).toUpperCase() || "U"}
+                    {article.user?.name?.split(" ")[1]
+                      ? article.user?.name
+                          ?.split(" ")[1]
+                          .split("")[0]
+                          .toUpperCase()
+                      : "U"}
+                  </AvatarFallback>
+                </Avatar>
                 <span>{article.user.name}</span>
               </div>
 

@@ -45,11 +45,7 @@ export const AuthorCard = ({ username }: { username: string }) => {
     <Card className="w-full h-fit">
       <CardHeader className="flex flex-col items-center text-center">
         <Avatar className="w-20 h-20">
-          <AvatarImage
-            loading="lazy"
-            src={author.profile_image}
-            alt={author.name}
-          />
+          <AvatarImage src={author.profile_image} alt={author.name} />
           <AvatarFallback className="text-4xl">
             {author.name.split(" ")[0][0].toLocaleUpperCase()}
             {author.name.split(" ")[1][0].toLocaleUpperCase()}
