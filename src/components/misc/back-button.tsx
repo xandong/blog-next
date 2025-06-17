@@ -38,14 +38,17 @@ export const BackButton = ({ href, label }: BackButtonProps) => {
     <div className="my-2">
       {href ? (
         <Link href={href} prefetch>
-          <Button variant={"link"} className="flex items-center gap-0 text-lg">
+          <Button
+            variant={"link"}
+            className="flex items-center gap-0 text-lg !pl-0"
+          >
             {content}
           </Button>
         </Link>
       ) : (
         <Button
           variant={"link"}
-          className="flex items-center gap-0 text-lg"
+          className="flex items-center gap-0 text-lg !pl-0"
           onClick={handleClick}
         >
           {content}

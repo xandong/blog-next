@@ -33,8 +33,8 @@ export default async function Page({ params }: PageProps) {
         <BackButton />
       </div>
 
-      <div className="w-full mx-auto pb-8 gap-8 flex lg:flex-row flex-col items-start ">
-        <Card className="flex-1 w-full">
+      <div className="max-w-full mx-auto pb-8 gap-8 flex lg:flex-row flex-col items-start ">
+        <Card className="max-w-full">
           <CardContent>
             <h1 className="md:text-3xl text-xl font-bold text-gray-900 dark:text-white mb-2">
               {article.title}
@@ -58,7 +58,7 @@ export default async function Page({ params }: PageProps) {
               </div>
             )}
 
-            <div className="prose dark:prose-invert max-w-4xl w-full">
+            <div className="prose dark:prose-invert max-w-xl w-full">
               <Markdown markdownContent={article.body_markdown || ""} />
             </div>
           </CardContent>

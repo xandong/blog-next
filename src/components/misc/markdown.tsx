@@ -92,7 +92,7 @@ export function Markdown({ markdownContent }: MarkdownProps) {
 
             return (
               <code
-                className="bg-gray-200 dark:bg-gray-700 text-purple-700 dark:text-purple-300 rounded px-1 py-0.5"
+                className="bg-gray-200 dark:bg-gray-700 text-primary rounded px-1 py-0.5"
                 {...props}
               >
                 {children}

@@ -8,6 +8,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
       <main className="flex-1 flex items-center flex-col p-2 max-w-7xl w-full">
         {children}
       </main>
+
       <footer className="w-full bg-background text-foreground text-center py-4 px-4">
         © {new Date().getFullYear()} <strong>Share4us</strong> Blog. Todos os
         direitos reservados.
