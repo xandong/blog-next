@@ -1,10 +1,12 @@
+import "@/styles/global.css"
+
 import type { Metadata } from "next"
 import localFont from "next/font/local"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
-import "@/styles/global.css"
 import { ThemeProvider } from "@/components/layout/theme-provider"
 import { Toaster } from "@/components/_ui/sonner"
-import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -46,6 +48,7 @@ export default function RootLayout({
           {children}
           <Toaster duration={3000} position="top-right" />
           <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
