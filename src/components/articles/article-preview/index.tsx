@@ -113,12 +113,14 @@ export const ArticleItemPreview = ({
     }
   }, [article, isArchived, onUpdateArticle])
 
+  const redirectLink = `${isMyPost ? `/draft/${article.id}` : `${article.user.username}/${article.slug}`}`
+
   return (
     <>
       <Card className="group flex w-4xl max-w-full h-full flex-col sm:flex-row overflow-hidden transition-shadow duration-300 group-hover:shadow-lg p-0">
         {article.cover_image && (
           <div className="sm:w-2/5 relative h-48 sm:h-auto">
-            <Link href={`/articles/${article.id}`} className="flex">
+            <Link href={redirectLink} className="flex">
               <Image
                 loading="lazy"
                 aria-multiline
@@ -148,7 +150,7 @@ export const ArticleItemPreview = ({
                           ?.split(" ")[1]
                           .split("")[0]
                           .toUpperCase()
-                      : "U"}
+                      : article.user?.name?.charAt(1).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <span>{article.user.name}</span>
@@ -222,7 +224,7 @@ export const ArticleItemPreview = ({
             </div>
           </CardHeader>
 
-          <Link href={`/articles/${article.id}`}>
+          <Link href={redirectLink}>
             <CardContent>
               <CardTitle className="text-xl leading-tight group-hover:text-primary px-0">
                 {article.title}
@@ -258,8 +260,10 @@ export const ArticleItemPreview = ({
       </Card>
 
       <ConfirmationDialog
-        title={`Confirmar ação`}
-        description={`Tem certeza que deseja arquivar o artigo "${article.title}".`}
+        title={`Tem certeza que deseja arquivar o artigo "${article.title}"?`}
+        description={
+          "Isso fará com que você não possa mais editar o artigo na nossa plataforma."
+        }
         loading={isLoading}
         onConfirm={handleConfirmUnpublish}
         open={isUnpublishDialogOpen}

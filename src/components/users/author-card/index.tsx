@@ -47,8 +47,10 @@ export const AuthorCard = ({ username }: { username: string }) => {
         <Avatar className="w-20 h-20">
           <AvatarImage src={author.profile_image} alt={author.name} />
           <AvatarFallback className="text-4xl">
-            {author.name.split(" ")[0][0].toLocaleUpperCase()}
-            {author.name.split(" ")[1][0].toLocaleUpperCase()}
+            {author?.name?.charAt(0).toUpperCase() || "U"}
+            {author?.name?.split(" ")[1]
+              ? author?.name?.split(" ")[1].split("")[0].toUpperCase()
+              : author?.name?.charAt(1).toUpperCase() || "U"}
           </AvatarFallback>
         </Avatar>
 

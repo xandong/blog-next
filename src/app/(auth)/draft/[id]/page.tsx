@@ -1,7 +1,9 @@
 import { getArticleByIdAction } from "@/app/_actions/articles/get-article-by-id"
-
+import { Button } from "@/components/_ui/button"
 import { UpsertArticleForm } from "@/components/articles/create-article-form"
 import { AppLayout } from "@/components/layout/app-layout"
+import { BackButton } from "@/components/misc/back-button"
+import Link from "next/link"
 
 interface PageProps {
   params: { id: string }
@@ -23,6 +25,14 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <AppLayout>
+      <div className="w-full flex justify-between">
+        <BackButton />
+
+        <Link href={`/articles/${article.id}`}>
+          <Button variant={"outline"}>Preview</Button>
+        </Link>
+      </div>
+
       <div className="flex flex-col items-start w-full max-w-5xl">
         <h1 className="text-3xl font-bold">Edite seu artigo</h1>
         <h2 className="text-xl font- mb-4 text-muted-foreground">
