@@ -90,7 +90,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
       schema.parse(data)
       setLoading(true)
 
-      const body = JSON.stringify({
+      const body = {
         article: {
           title: data.title,
           main_image: data.coverImage,
@@ -99,23 +99,14 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
           description: "",
           published: true
         }
-      })
+      }
 
       try {
         let response = undefined
         if (article) {
           const { success } = await updateArticleAction({
             id: article.id.toString(),
-            data: {
-              article: {
-                title: data.title,
-                main_image: data.coverImage,
-                body_markdown: data.content,
-                tags: data.tags,
-                description: "",
-                published: true
-              }
-            }
+            data: body
           })
 
           if (success) {
@@ -127,7 +118,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
           response = await fetch("/api/proxy-articles", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body
+            body: JSON.stringify(body)
           })
 
           const text = await response.text()

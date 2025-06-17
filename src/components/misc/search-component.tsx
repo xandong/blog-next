@@ -1,58 +1,68 @@
 "use client"
 
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { SearchIcon, XIcon } from "lucide-react"
+import { useDebounce } from "use-debounce"
 
+import { Article } from "@/types/custom"
 import { Input } from "../_ui/input"
-import { useState } from "react"
-import { Button } from "../_ui/button"
 
-export const SearchComponent = () => {
-  const [activeSearchMobile, setActiveSearchMobile] = useState(false)
+interface SearchComponentProps {
+  setArticles: Dispatch<SetStateAction<Article[]>>
+  initialArticles: Article[]
+  label?: string
+}
+
+export const SearchComponent = ({
+  label,
+  setArticles,
+  initialArticles
+}: SearchComponentProps) => {
   const [searchValue, setSearchValue] = useState("")
+  const [value] = useDebounce(searchValue, 1000)
+
+  useEffect(() => {
+    if (!value || value === "") return setArticles(initialArticles)
+
+    const upperCaseValue = value.toUpperCase()
+
+    setArticles(
+      initialArticles.filter((article) => {
+        const title = article.title.toUpperCase()
+        const description = article.description.toUpperCase()
+        const tags = article.tag_list.map((tag) => tag.toUpperCase())
+
+        if (title.includes(upperCaseValue)) return true
+        if (description.includes(upperCaseValue)) return true
+        if (tags.some((tag) => tag.includes(upperCaseValue))) return true
+
+        return false
+      })
+    )
+  }, [initialArticles, setArticles, value])
 
   return (
-    <div className="flex-1 flex items-center gap-2 md:justify-start justify-end">
-      <div className="hidden md:block max-w-96 w-full">
+    <div className="max-w-xl w-full flex flex-row justify-center mb-6">
+      <div className="w-full">
         <Input
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Pesquise pelos assuntos que mais lhe interessam"
-          endIcon={<SearchIcon size={20} color="gray" />}
+          placeholder={
+            label ? label : "Pesquise pelos assuntos que mais lhe interessam"
+          }
+          endIcon={
+            searchValue !== "" ? (
+              <button
+                onClick={() => setSearchValue("")}
+                className="flex items-center justify-center"
+              >
+                <XIcon size={20} color="gray" />
+              </button>
+            ) : (
+              <SearchIcon size={20} color="gray" />
+            )
+          }
         />
-      </div>
-
-      <div className="md:hidden flex">
-        <Button
-          size={"icon"}
-          variant={"ghost"}
-          onClick={() => setActiveSearchMobile(true)}
-        >
-          <SearchIcon size={18} />
-        </Button>
-
-        {activeSearchMobile && (
-          <div className="flex absolute top-0 left-0 w-full bg-background h-full z-10 items-center justify-center px-2">
-            <Input
-              autoFocus
-              placeholder="Pesquise pelos assuntos que mais lhe interessam"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              endIcon={
-                <button
-                  onClick={() =>
-                    searchValue === "" && setActiveSearchMobile(false)
-                  }
-                >
-                  {searchValue === "" ? (
-                    <XIcon size={20} color="gray" />
-                  ) : (
-                    <SearchIcon size={20} color="gray" />
-                  )}
-                </button>
-              }
-            />
-          </div>
-        )}
       </div>
     </div>
   )

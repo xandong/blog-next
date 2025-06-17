@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
+
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale/pt-BR"
 import { BrowserIcon, GithubLogoIcon, XLogoIcon } from "@phosphor-icons/react"
@@ -17,6 +17,7 @@ import {
 import { useEffect, useState } from "react"
 import { getUserByIdAction } from "@/app/_actions/users/getUserById"
 import { Skeleton } from "@/components/_ui/skeleton"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/_ui/avatar"
 
 export const AuthorCard = ({ username }: { username: string }) => {
   const [loading, setLoading] = useState(true)
@@ -43,14 +44,16 @@ export const AuthorCard = ({ username }: { username: string }) => {
   return (
     <Card className="w-full h-fit">
       <CardHeader className="flex flex-col items-center text-center">
-        <Image
-          loading="lazy"
-          src={author.profile_image}
-          alt={author.name}
-          width={80}
-          height={80}
-          className="rounded-full mb-3"
-        />
+        <Avatar className="w-20 h-20">
+          <AvatarImage src={author.profile_image} alt={author.name} />
+          <AvatarFallback className="text-4xl">
+            {author?.name?.charAt(0).toUpperCase() || "U"}
+            {author?.name?.split(" ")[1]
+              ? author?.name?.split(" ")[1].split("")[0].toUpperCase()
+              : author?.name?.charAt(1).toUpperCase() || "U"}
+          </AvatarFallback>
+        </Avatar>
+
         <h3 className="text-xl font-semibold">{author.name}</h3>
         <span className="text-sm text-muted-foreground">
           @{author.username}

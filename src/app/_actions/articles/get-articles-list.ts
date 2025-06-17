@@ -18,15 +18,8 @@ interface GetArticlesListActionProps {
 }
 
 export const getArticlesListAction = async ({
-  collectionId = undefined,
   page = 1,
-  perPage = 20,
-  tag = undefined,
-  tags = undefined,
-  tagsExclude = undefined,
-  username = undefined,
-  state = undefined,
-  top = undefined
+  perPage = 30
 }: GetArticlesListActionProps): Promise<{
   data?: Article[]
   error?: string
@@ -35,22 +28,11 @@ export const getArticlesListAction = async ({
     const session = await getSession()
     const apiKey = session.apiKey
 
-    const response = await articlesApi.getArticles(
-      page,
-      perPage,
-      tag,
-      tags,
-      tagsExclude,
-      username,
-      state,
-      top,
-      collectionId,
-      {
-        headers: {
-          "api-key": apiKey || ""
-        }
+    const response = await articlesApi.getLatestArticles(page, perPage, {
+      headers: {
+        "api-key": apiKey || ""
       }
-    )
+    })
 
     return { data: response.data as Article[] }
   } catch (error) {

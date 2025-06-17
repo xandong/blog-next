@@ -27,13 +27,19 @@ export const BackButton = ({ href, label }: BackButtonProps) => {
     window.location.href = "/"
   }, [isClient, router])
 
-  return (
+  const content = (
     <>
+      <ArrowLeftIcon size={24} />
+      <span className="font-semibold text-lg">{label || "Voltar"}</span>
+    </>
+  )
+
+  return (
+    <div className="my-2">
       {href ? (
         <Link href={href} prefetch>
           <Button variant={"link"} className="flex items-center gap-0 text-lg">
-            <ArrowLeftIcon size={24} />
-            <span className="uppercase">{label || "Voltar"}</span>
+            {content}
           </Button>
         </Link>
       ) : (
@@ -42,10 +48,9 @@ export const BackButton = ({ href, label }: BackButtonProps) => {
           className="flex items-center gap-0 text-lg"
           onClick={handleClick}
         >
-          <ArrowLeftIcon size={24} />
-          <span className="uppercase">{label || "Voltar"}</span>
+          {content}
         </Button>
       )}
-    </>
+    </div>
   )
 }

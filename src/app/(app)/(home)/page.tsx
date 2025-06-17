@@ -1,38 +1,17 @@
 import { getArticlesListAction } from "@/app/_actions/articles/get-articles-list"
 
-import ArticlesPaginationInfinite from "@/components/articles/articles-pagination-infinite"
-import { CreateMinimalArticle } from "@/components/articles/create-minimal-article"
 import { AppLayout } from "@/components/layout/app-layout"
+import { Home } from "@/components/layout/pages/home-page"
+
 import { getSession } from "@/lib/session"
 
-export default async function Home() {
+export default async function HomeContainer() {
   const { user } = await getSession()
   const { data: articles } = await getArticlesListAction({})
 
   return (
     <AppLayout>
-      <div className="w-full flex flex-col">
-        {user && (
-          <div className="w-full flex justify-center mb-10">
-            <div className="w-full max-w-3xl">
-              <CreateMinimalArticle />
-            </div>
-          </div>
-        )}
-
-        {!articles || articles.length === 0 ? (
-          <div className="w-full flex justify-center">
-            <p className="text-xl font-bold">Nenhum artigo encontrado</p>
-          </div>
-        ) : (
-          <div className="w-full flex justify-center">
-            <ArticlesPaginationInfinite
-              initialArticles={articles}
-              currentUser={user}
-            />
-          </div>
-        )}
-      </div>
+      <Home initialArticles={articles || []} user={user} />
     </AppLayout>
   )
 }

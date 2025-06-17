@@ -4,7 +4,6 @@ import { Navbar } from "./navbar"
 import Image from "next/image"
 
 import { getSession } from "@/lib/session"
-import { SearchComponent } from "../misc/search-component"
 
 export const Header = async () => {
   const { user } = await getSession()
@@ -25,8 +24,6 @@ export const Header = async () => {
           </span>
         </Link>
       </div>
-
-      <SearchComponent />
 
       <Navbar user={user} />
     </header>
