@@ -56,7 +56,7 @@ export function Markdown({ markdownContent }: MarkdownProps) {
   }
 
   return (
-    <div className="prose dark:prose-invert max-w-none px-4 py-8">
+    <div className="prose dark:prose-invert max-w-none sm:px-4 px-0 py-8 md:text-base text-sm">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkCodepenPlugin]}
         rehypePlugins={[rehypeRaw]}
@@ -74,14 +74,19 @@ export function Markdown({ markdownContent }: MarkdownProps) {
             const hasLang = /language-(\w+)/.exec(className || "")
             if (hasLang) {
               return (
-                <pre className="relative rounded-lg p-4 bg-gray-800 text-white font-mono text-sm overflow-x-auto">
-                  <code className={`language-${hasLang[1]}`} {...props}>
-                    {children}
-                  </code>
-                  <span className="absolute top-2 right-4 text-xs text-gray-400">
-                    {hasLang[1].toUpperCase()}
-                  </span>
-                </pre>
+                <div className="relative">
+                  <pre className="rounded-lg p-4 md:py-4 pt-5 bg-gray-800 text-white font-mono text-sm overflow-x-auto">
+                    <code
+                      className={`language-${hasLang[1]} wrap-anywhere md:text-base text-xs`}
+                      {...props}
+                    >
+                      {children}
+                    </code>
+                    <span className="absolute md:top-2 top-1.5 md:right-4 right-3 text-xs text-gray-400">
+                      {hasLang[1].toUpperCase()}
+                    </span>
+                  </pre>
+                </div>
               )
             }
 
