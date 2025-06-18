@@ -76,8 +76,9 @@ Apesar de ter mais experiência com React com Vite, e gerenciamento com Redux. E
 - Indicadores de loading e estado vazio;
 - Toasts para erros e confirmações com `sonner`.
 
-### ☁️ Adicional (AWS/S3)
+### Adicional
 
+- Tema light e dark;
 - O endpoint para upload de arquivos também não é fornecido na API para a `cover_image`. Então temos duas opções no projeto, caso definirmos as credenciais e a env para o S3, é renderizado um display que faz o upload para um bucket. Caso contrário, aceitamos URLs públicas.
 
 ---
