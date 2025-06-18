@@ -67,12 +67,17 @@ export const SignIn = () => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>API Key</FormLabel>
+                    <FormLabel htmlFor={field.name}>API Key</FormLabel>
                     <FormDescription>
                       Não compartilhamos seus dados
                     </FormDescription>
                     <FormControl>
-                      <Input {...field} type="password" autoComplete="off" />
+                      <Input
+                        {...field}
+                        id="apiKey"
+                        type="password"
+                        autoComplete="off"
+                      />
                     </FormControl>
 
                     <FormMessage />
@@ -81,7 +86,11 @@ export const SignIn = () => {
               />
 
               <Button type="submit" className="w-full">
-                {loading ? <Loader2 className="animate-spin" /> : "Entrar"}
+                {loading ? (
+                  <Loader2 data-testid="loader" className="animate-spin" />
+                ) : (
+                  "Entrar"
+                )}
               </Button>
             </form>
           </Form>

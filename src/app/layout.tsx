@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { ThemeProvider } from "@/components/layout/theme-provider"
 import { Toaster } from "@/components/_ui/sonner"
+// import { Toaster } from "@/components/_ui/sonner"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

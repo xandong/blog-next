@@ -257,7 +257,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
 
           <Button type="submit" className="w-full">
             {loading || uploadingImage ? (
-              <Loader2 className="animate-spin" />
+              <Loader2 className="animate-spin" data-testid="spinner" />
             ) : (
               "Publicar"
             )}

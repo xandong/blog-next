@@ -1,4 +1,4 @@
-import { UpsertArticleForm } from "@/components/articles/create-article-form"
+import { UpsertArticleForm } from "@/components/articles/upsert-article-form"
 import { AppLayout } from "@/components/layout/app-layout"
 import { BackButton } from "@/components/misc/back-button"
 

@@ -1,6 +1,6 @@
 import { getArticleByIdAction } from "@/app/_actions/articles/get-article-by-id"
 import { Button } from "@/components/_ui/button"
-import { UpsertArticleForm } from "@/components/articles/create-article-form"
+import { UpsertArticleForm } from "@/components/articles/upsert-article-form"
 import { AppLayout } from "@/components/layout/app-layout"
 import { BackButton } from "@/components/misc/back-button"
 import Link from "next/link"
