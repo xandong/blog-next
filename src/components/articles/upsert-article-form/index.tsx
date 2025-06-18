@@ -149,7 +149,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
     <div className="w-full flex flex-col items-center justify-center gap-4 mt-4">
       {form.watch("coverImage") && (
         <Image
-          loading="lazy"
+          data-testid="preview-image"
           src={form.watch("coverImage") || ""}
           alt="Preview da imagem"
           className="rounded-md object-cover"
@@ -170,7 +170,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
               </FormLabel>
               <FormControl>
                 <Input
-                  id="cover-image"
+                  data-testid="cover-image-input-local"
                   className="bg-background border border-border rounded-sm box-border pt-1.5"
                   type="file"
                   accept="image/*"
@@ -192,6 +192,8 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
                   <FormControl>
                     <Input
                       {...field}
+                      data-testid="cover-image-input-public"
+                      type="text"
                       placeholder="URL pública da imagem de capa (opcional)"
                       className="text-sm"
                     />

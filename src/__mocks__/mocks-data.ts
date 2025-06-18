@@ -1,14 +1,17 @@
 import { Article } from "@/types/custom"
 
-export const articleMock: Article = {
-  id: 1,
-  title: "Artigo Teste",
-  body_markdown: "Conteúdo",
-  tag_list: ["test"],
-  cover_image: "http://image.png",
+export const mockArticle: Article = {
+  id: 123,
+  title: "Meu Artigo de Teste",
+  cover_image: "https://example.com/image.jpg",
+  tag_list: ["React"],
+  body_markdown: "Conteúdo do artigo existente.",
+  readable_publish_date: "2024-01-01",
+  comments_count: 0,
+  public_reactions_count: 0,
+  reading_time_minutes: 5,
   type_of: "article",
   description: "",
-  readable_publish_date: "",
   social_image: "",
   published: false,
   published_at: "",
@@ -19,19 +22,16 @@ export const articleMock: Article = {
   edited_at: "",
   crossposted_at: "",
   last_comment_at: "",
-  reading_time_minutes: 0,
   organization: {
     name: ""
   },
   tags: "",
   canonical_url: "",
-  comments_count: 0,
   positive_reactions_count: 0,
-  public_reactions_count: 0,
   page_views_count: 0,
   published_timestamp: "",
   user: {
-    name: "",
+    name: "Test User",
     username: "",
     twitter_username: "",
     github_username: "",

@@ -85,7 +85,7 @@ export default function ArticlesPaginationInfinite({
   }
 
   return (
-    <ul className="grid gap-6">
+    <div className="w-full grid gap-6">
       <ArticleList
         articles={articles}
         currentUser={currentUser}
@@ -96,6 +96,6 @@ export default function ArticlesPaginationInfinite({
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </li>
       )}
-    </ul>
+    </div>
   )
 }

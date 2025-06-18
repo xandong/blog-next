@@ -12,7 +12,7 @@ interface ArticleListProps {
 
 export const ArticleList = (params: ArticleListProps) => {
   return (
-    <ul className="grid grid-cols-1 gap-6">
+    <ul className="w-full grid grid-cols-1 gap-6">
       {params.articles.map((article) => (
         <ArticleItemPreview
           key={`${article.id}${article.slug}`}

@@ -5,7 +5,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="max-w-[100vw] min-h-[100vh] bg-background flex flex-col items-center">
       <Header />
 
-      <main className="flex-1 flex items-center flex-col p-2 max-w-7xl w-full">
+      <main className="flex-1 flex items-center flex-col p-4 max-w-7xl w-full">
         {children}
       </main>
 

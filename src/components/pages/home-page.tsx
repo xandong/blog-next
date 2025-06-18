@@ -52,7 +52,7 @@ export const Home = ({
         <>
           <div className="w-4xl max-w-full flex justify-end mb-4">
             <Tabs defaultValue={showTab} className="items-end">
-              <TabsList>
+              <TabsList className="mb-2">
                 <TabsTrigger
                   value="latest"
                   onChange={(e) =>
@@ -70,6 +70,7 @@ export const Home = ({
                   Tendências
                 </TabsTrigger>
               </TabsList>
+
               <TabsContent value="latest">
                 <ArticlesPaginationInfinite
                   articles={filteredLatestArticles}
@@ -78,6 +79,7 @@ export const Home = ({
                   request={getLatestArticlesListAction}
                 />
               </TabsContent>
+
               <TabsContent value="trending">
                 <ArticlesPaginationInfinite
                   articles={filteredArticles}

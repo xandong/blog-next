@@ -23,6 +23,7 @@ const config: Config = {
     "^@/lib/(.*)$": "<rootDir>/src/lib/$1",
     "^@/types/(.*)$": "<rootDir>/src/types/$1",
     "^@/utils/(.*)$": "<rootDir>/src/utils/$1",
+    "^@/__mocks__/(.*)$": "<rootDir>/src/__mocks__/$1",
 
     // libs
     "^uncrypto$": "<rootDir>/src/__mocks__/uncrypto.js",
