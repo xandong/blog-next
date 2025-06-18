@@ -3,8 +3,8 @@ import Link from "next/link"
 import { getSession } from "@/lib/session"
 import { getMyArticlesListAction } from "@/app/_actions/users/get-my-articles-list"
 
-import { MePage } from "@/components/layout/pages/me-page"
 import { AppLayout } from "@/components/layout/app-layout"
+import { MePage } from "@/components/pages/me-page"
 import { Button } from "@/components/_ui/button"
 import { BackButton } from "@/components/misc/back-button"
 

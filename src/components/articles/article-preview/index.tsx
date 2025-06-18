@@ -10,7 +10,8 @@ import {
   Clock,
   MoreVerticalIcon,
   EditIcon,
-  UploadCloudIcon
+  UploadCloudIcon,
+  MessageSquareIcon
 } from "lucide-react"
 
 import { ArticleIndex, ArticleMe, User } from "@/types/generated"
@@ -40,12 +41,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/_ui/avatar"
 
 const ArticleMeta = ({
   icon: Icon,
-  value
+  value,
+  addon = null
 }: {
   icon: React.ElementType
   value: React.ReactNode
+  addon?: React.ReactNode
 }) => (
-  <div className="flex items-center gap-1 text-sm text-muted-foreground flex-nowrap cursor-default">
+  <div className="flex items-center gap-1 text-sm text-muted-foreground flex-nowrap cursor-default relative">
+    {addon && <span>{addon}</span>}
     <Icon className="h-4 w-4" />
     <span className="text-nowrap">{value}</span>
   </div>
@@ -122,8 +126,7 @@ export const ArticleItemPreview = ({
           <div className="sm:w-2/5 relative h-48 sm:h-auto">
             <Link href={redirectLink} className="flex">
               <Image
-                loading="lazy"
-                aria-multiline
+                // loading="lazy"
                 src={article.cover_image}
                 alt={`Capa do artigo: ${article.title}`}
                 fill
@@ -245,6 +248,11 @@ export const ArticleItemPreview = ({
               <ArticleMeta
                 icon={Heart}
                 value={article.public_reactions_count}
+              />
+
+              <ArticleMeta
+                icon={MessageSquareIcon}
+                value={article.comments_count}
               />
             </div>
 
