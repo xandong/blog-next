@@ -42,20 +42,20 @@ export default function ArticlesPaginationInfinite({
       (ts) => now - ts < 1_000
     )
 
-    fetchTimestamps.current.push(now)
-
-    if (fetchTimestamps.current.length > 5) {
+    if (fetchTimestamps.current.length >= 5) {
       setHasMore(false)
-
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setHasMore(true)
         fetchTimestamps.current = []
-      }, 60_000)
+      }, 15_000)
 
-      return
+      return () => clearTimeout(timeout)
     }
 
     if (page >= MAX_PAGES || !inView || !hasMore) return
+
+    setLoading(true)
+    fetchTimestamps.current.push(now)
 
     getArticlesRequest({ page: page })
       .then(({ data: newArticles }) => {

@@ -22,23 +22,28 @@ export const SearchComponent = ({
   const [value] = useDebounce(searchValue, 1000)
 
   useEffect(() => {
-    if (!value || value === "") return setArticles(initialArticles)
+    if (!value?.trim()) {
+      setArticles(initialArticles)
+      return
+    }
 
-    const upperCaseValue = value.toUpperCase()
+    const words = value.trim().toUpperCase().split(/\s+/).filter(Boolean)
 
-    setArticles(
-      initialArticles.filter((article) => {
-        const title = article.title.toUpperCase()
-        const description = article.description.toUpperCase()
-        const tags = article.tag_list.map((tag) => tag.toUpperCase())
+    const filtered = initialArticles.filter((article) => {
+      const title = article.title.toUpperCase()
+      const description = article.description.toUpperCase()
+      const tags = article.tag_list.map((tag) => tag.toUpperCase())
 
-        if (title.includes(upperCaseValue)) return true
-        if (description.includes(upperCaseValue)) return true
-        if (tags.some((tag) => tag.includes(upperCaseValue))) return true
-
-        return false
+      return words.every((word) => {
+        return (
+          title.includes(word) ||
+          description.includes(word) ||
+          tags.some((tag) => tag.includes(word))
+        )
       })
-    )
+    })
+
+    setArticles(filtered)
   }, [initialArticles, setArticles, value])
 
   return (
