@@ -1,220 +1,206 @@
 /* eslint-disable no-extra-semi */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
-// tests/upsert-article-form.test.tsx
+import "@testing-library/jest-dom"
+import { render, screen, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { UpsertArticleForm } from "@/components/articles/upsert-article-form"
+import { mockArticle } from "@/__mocks__/mocks-data"
 
-// import { render, screen, fireEvent, waitFor } from "@testing-library/react"
-// import { UpsertArticleForm } from "../../../components/articles/upsert-article-form"
-// import { act } from "react-dom/test-utils"
-// import { articleMock } from "../../../__mocks__/mocks-data"
-// import Link from "next/link"
+jest.mock("@/app/_actions/tags/get-tags-list", () => ({
+  getTagsListAction: jest.fn()
+}))
+jest.mock("@/app/_actions/articles/update-article", () => ({
+  updateArticleAction: jest.fn()
+}))
+jest.mock("@/app/_actions/articles/create-article", () => ({
+  createArticleAction: jest.fn()
+}))
+jest.mock("@/components/misc/editor", () => ({
+  __esModule: true,
+  default: ({
+    value,
+    onChange
+  }: {
+    value: string
+    onChange: (value: string) => void
+  }) => (
+    <textarea
+      data-testid="editor"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  )
+}))
 
-// jest.mock("next/router", () => ({
-//   useRouter: jest.fn()
-// }))
-// import { useRouter } from "next/router"
+const mockPush = jest.fn()
+const mockPrefetch = jest.fn()
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockPush,
+    prefetch: mockPrefetch
+  })
+}))
 
-// // Mockando next/image
-// jest.mock("next/image", () => ({
-//   __esModule: true,
-//   default: (props: any) => <Link {...props} />
-// }))
+jest.mock("sonner", () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn()
+  }
+}))
 
-// // Mockando o editor
-// jest.mock("@/components/misc/editor", () => ({
-//   __esModule: true,
-//   default: ({
-//     value,
-//     onChange
-//   }: {
-//     value: string
-//     onChange: (value: string) => void
-//   }) => (
-//     <textarea
-//       data-testid="editor"
-//       value={value}
-//       onChange={(e) => onChange(e.target.value)}
-//     />
-//   )
-// }))
+jest.mock("@/components/misc/editor", () => {
+  return function MockEditor({
+    value,
+    onChange
+  }: {
+    value: string
+    onChange: (value: string) => void
+  }) {
+    return (
+      <textarea
+        data-testid="mock-editor"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label="content"
+      />
+    )
+  }
+})
 
-// // Mockando ações
-// jest.mock("@/app/_actions/tags/get-tags-list", () => ({
-//   getTagsListAction: jest.fn(() =>
-//     Promise.resolve({
-//       tags: [{ name: "test", bg_color_hex: "#000", text_color_hex: "#fff" }]
-//     })
-//   )
-// }))
+import { getTagsListAction } from "@/app/_actions/tags/get-tags-list"
+import { updateArticleAction } from "@/app/_actions/articles/update-article"
+import { toast } from "sonner"
 
-// jest.mock("@/app/_actions/articles/update-article", () => ({
-//   updateArticleAction: jest.fn(() => Promise.resolve({ success: true }))
-// }))
-
-// // Mockando fetch
-// global.fetch = jest.fn()
-
-// // Mockando useRouter
-// const pushMock = jest.fn()
-// // jest.mock("next/navigation", () => ({
-// //   useRouter: () => ({
-// //     push: pushMock,
-// //     prefetch: prefetchMock
-// //   })
-// // }))
-
-// // Mockando sonner
-// const toastSuccessMock = jest.fn()
-// const toastErrorMock = jest.fn()
-// jest.mock("sonner", () => ({
-//   toast: {
-//     success: toastSuccessMock,
-//     error: toastErrorMock
-//   }
-// }))
+const mockTagsList = [
+  { id: 1, name: "React", bg_color_hex: "#61DAFB", text_color_hex: "#000000" },
+  {
+    id: 2,
+    name: "Next.js",
+    bg_color_hex: "#000000",
+    text_color_hex: "#FFFFFF"
+  },
+  { id: 3, name: "Jest", bg_color_hex: "#C21325", text_color_hex: "#FFFFFF" }
+]
 
 describe("UpsertArticleForm", () => {
-  // beforeEach(() => {
-  //   ;(useRouter as jest.Mock).mockReturnValue({
-  //     route: "/",
-  //     pathname: "/",
-  //     query: {},
-  //     asPath: "/",
-  //     push: jest.fn(), // Simula a navegação
-  //     replace: jest.fn(),
-  //     reload: jest.fn(),
-  //     back: jest.fn(),
-  //     prefetch: jest.fn().mockResolvedValue(undefined),
-  //     beforePopState: jest.fn(),
-  //     events: {
-  //       on: jest.fn(),
-  //       off: jest.fn(),
-  //       emit: jest.fn()
-  //     },
-  //     isFallback: false
-  //   })
+  const originalEnv = process.env
 
-  //   jest.clearAllMocks()
-  //   ;(global.fetch as jest.Mock).mockReset()
-  // })
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(getTagsListAction as jest.Mock).mockResolvedValue({ tags: mockTagsList })
+    ;(updateArticleAction as jest.Mock).mockResolvedValue({ success: true })
 
-  it("generic test", () => {
-    expect(true).toBe(true)
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ id: 456 }),
+        text: () => Promise.resolve(JSON.stringify({ id: 456 }))
+      })
+    ) as jest.Mock
+
+    process.env = { ...originalEnv }
   })
-  // it("renders empty form correctly for new article", async () => {
-  //   render(<UpsertArticleForm />)
 
-  //   expect(
-  //     await screen.findByPlaceholderText("Insira o título...")
-  //   ).toBeInTheDocument()
-  //   expect(screen.getByText("Publicar")).toBeInTheDocument()
-  // })
+  afterAll(() => {
+    process.env = originalEnv
+  })
 
-  // it("renders form with article data", async () => {
-  //   render(<UpsertArticleForm article={articleMock} />)
+  it("deve renderizar o formulário em modo de criação corretamente", async () => {
+    render(<UpsertArticleForm />)
 
-  //   expect(await screen.findByDisplayValue("Artigo Teste")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(getTagsListAction).toHaveBeenCalledTimes(1)
+    })
 
-  //   const image = screen.getByAltText("Preview da imagem")
-  //   expect(image).toHaveAttribute("src", "http://image.png")
-  // })
+    expect(
+      screen.getByPlaceholderText("Insira o título...")
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText("content")).toBeInTheDocument()
+    expect(screen.getByText("Selecione até 4 tags")).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: /publicar/i })
+    ).toBeInTheDocument()
+  })
 
-  // it("submit new article successfully", async () => {
-  //   ;(global.fetch as jest.Mock).mockResolvedValueOnce({
-  //     ok: true,
-  //     json: () => Promise.resolve({ id: 123 })
+  it("deve renderizar o formulário em modo de edição com valores preenchidos", async () => {
+    render(<UpsertArticleForm article={mockArticle} />)
+
+    await waitFor(() => {
+      expect(getTagsListAction).toHaveBeenCalledTimes(1)
+    })
+
+    expect(screen.getByDisplayValue(mockArticle.title)).toBeInTheDocument()
+    expect(
+      screen.getByDisplayValue(mockArticle.body_markdown)
+    ).toBeInTheDocument()
+
+    expect(screen.getByAltText("Preview da imagem")).toHaveAttribute(
+      "src",
+      expect.stringContaining("image.jpg")
+    )
+  })
+
+  it("deve atualizar um artigo existente quando o formulário é submetido", async () => {
+    const user = userEvent.setup()
+    render(<UpsertArticleForm article={mockArticle} />)
+
+    await waitFor(() => expect(getTagsListAction).toHaveBeenCalled())
+
+    const titleInput = screen.getByDisplayValue(mockArticle.title)
+    await user.clear(titleInput)
+    await user.type(titleInput, "Título Atualizado")
+
+    await user.click(screen.getByRole("button", { name: /publicar/i }))
+
+    await waitFor(() => {
+      expect(updateArticleAction).toHaveBeenCalledWith({
+        id: mockArticle.id.toString(),
+        data: expect.objectContaining({
+          article: expect.objectContaining({
+            title: "Título Atualizado"
+          })
+        })
+      })
+    })
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        "Artigo atualizado com sucesso!"
+      )
+      expect(mockPush).toHaveBeenCalledWith(`/articles/${mockArticle.id}`)
+    })
+  })
+
+  // describe("com upload via S3 habilitado", () => {
+  //   beforeEach(() => {
+  //     process.env.NEXT_PUBLIC_USE_S3_BUCKET = "1"
   //   })
 
-  //   render(<UpsertArticleForm />)
+  //   it("should render the input for local file", async () => {
+  //     render(<UpsertArticleForm />)
+  //     await waitFor(() => expect(getTagsListAction).toHaveBeenCalled())
 
-  //   fireEvent.change(screen.getByPlaceholderText("Insira o título..."), {
-  //     target: { value: "Novo Artigo" }
-  //   })
-
-  //   fireEvent.change(screen.getByTestId("editor"), {
-  //     target: { value: "Conteúdo do artigo" }
-  //   })
-
-  //   fireEvent.click(screen.getByText("Publicar"))
-
-  //   await waitFor(() => {
-  //     expect(toastSuccessMock).toHaveBeenCalledWith(
-  //       "Artigo criado com sucesso!"
-  //     )
-  //   })
-
-  //   expect(pushMock).toHaveBeenCalledWith("/articles/123")
-  // })
-
-  // it("atualiza artigo existente com sucesso", async () => {
-  //   const article = {
-  //     ...articleMock,
-  //     id: 5,
-  //     title: "Artigo Antigo",
-  //     body_markdown: "Texto",
-  //     tag_list: [],
-  //     cover_image: ""
-  //   }
-
-  //   render(<UpsertArticleForm article={article} />)
-
-  //   fireEvent.change(screen.getByPlaceholderText("Insira o título..."), {
-  //     target: { value: "Atualizado" }
-  //   })
-
-  //   fireEvent.click(screen.getByText("Publicar"))
-
-  //   await waitFor(() => {
-  //     expect(toastSuccessMock).toHaveBeenCalledWith(
-  //       "Artigo atualizado com sucesso!"
-  //     )
-  //   })
-
-  //   expect(pushMock).toHaveBeenCalledWith("/articles/5")
-  // })
-
-  // it("mostra spinner durante submit", async () => {
-  //   ;(global.fetch as jest.Mock).mockImplementationOnce(
-  //     () =>
-  //       new Promise((resolve) =>
-  //         setTimeout(
-  //           () => resolve({ json: () => Promise.resolve({ id: 123 }) }),
-  //           300
-  //         )
-  //       )
-  //   )
-
-  //   render(<UpsertArticleForm />)
-
-  //   fireEvent.change(screen.getByPlaceholderText("Insira o título..."), {
-  //     target: { value: "Artigo" }
-  //   })
-
-  //   fireEvent.change(screen.getByTestId("editor"), {
-  //     target: { value: "Texto" }
-  //   })
-
-  //   fireEvent.click(screen.getByText("Publicar"))
-
-  //   expect(screen.getByTestId("spinner")).toBeInTheDocument()
-
-  //   await waitFor(() => expect(global.fetch).toHaveBeenCalled())
-  // })
-
-  // it("exibe erro ao falhar upload da imagem", async () => {
-  //   ;(global.fetch as jest.Mock).mockResolvedValueOnce({ ok: false })
-
-  //   render(<UpsertArticleForm />)
-
-  //   const fileInput = screen.getByLabelText("Imagem destacada do artigo")
-  //   const file = new File(["img"], "test.png", { type: "image/png" })
-
-  //   await act(async () => {
-  //     fireEvent.change(fileInput, { target: { files: [file] } })
-  //   })
-
-  //   await waitFor(() => {
-  //     expect(toastErrorMock).toHaveBeenCalledWith("Erro ao enviar imagem.")
+  //     const input = screen.getByTestId("cover-image-input-local")
+  //     const all = screen.getAllByTestId("cover-image-input-local")
+  //     console.log({ all })
+  //     expect(input).toBeInTheDocument()
+  //     expect(input).toHaveAttribute("type", "file")
   //   })
   // })
+
+  describe("com upload via S3 desabilitado", () => {
+    beforeEach(() => {
+      process.env.NEXT_PUBLIC_USE_S3_BUCKET = "0"
+    })
+
+    it("should render the input for public URL", async () => {
+      render(<UpsertArticleForm />)
+      await waitFor(() => expect(getTagsListAction).toHaveBeenCalled())
+
+      const input = screen.getByTestId("cover-image-input-public")
+
+      expect(input).toBeInTheDocument()
+      expect(input).toHaveAttribute("type", "text")
+    })
+  })
 })

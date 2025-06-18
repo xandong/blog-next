@@ -51,7 +51,6 @@ export default async function Page({ params }: PageProps) {
             {article.cover_image && (
               <div className="my-6">
                 <Image
-                  loading="lazy"
                   src={article.cover_image}
                   alt={article.title}
                   width={800}

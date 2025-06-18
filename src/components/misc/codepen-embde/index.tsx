@@ -45,7 +45,6 @@ const CodepenEmbed: React.FC<CodepenEmbedProps> = ({
       title={title}
       src={src}
       // frameBorder="no"
-      loading="lazy"
       allowFullScreen
     ></iframe>
   )

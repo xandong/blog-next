@@ -110,7 +110,6 @@ export function Markdown({ markdownContent }: MarkdownProps) {
           ),
           img: ({ alt = "", src }) => (
             <Image
-              loading="lazy"
               src={src || ""}
               alt={alt}
               width={800}

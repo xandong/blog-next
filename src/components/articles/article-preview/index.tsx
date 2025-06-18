@@ -126,7 +126,7 @@ export const ArticleItemPreview = ({
           <div className="sm:w-2/5 relative h-48 sm:h-auto">
             <Link href={redirectLink} className="flex">
               <Image
-                // loading="lazy"
+                loading="lazy"
                 src={article.cover_image}
                 alt={`Capa do artigo: ${article.title}`}
                 fill

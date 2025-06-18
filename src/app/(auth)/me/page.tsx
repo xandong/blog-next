@@ -12,6 +12,7 @@ export default async function Page() {
   const { user } = await getSession()
   const { data: articles } = await getMyArticlesListAction({})
 
+  console.log({ users: articles?.map((a) => a.user) })
   return (
     <AppLayout>
       <div className="w-full flex justify-between items-center">
