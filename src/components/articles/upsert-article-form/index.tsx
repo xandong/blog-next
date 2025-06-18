@@ -27,6 +27,8 @@ import { useRouter } from "next/navigation"
 import { Article } from "@/types/custom"
 import { updateArticleAction } from "@/app/_actions/articles/update-article"
 
+const USE_S3 = process.env.NEXT_PUBLIC_USE_S3_BUCKET === "1"
+
 const schema = z.object({
   title: z.string(),
   content: z.string(),
@@ -161,42 +163,44 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
           className="space-y-4 w-full max-w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <FormItem>
-            <FormLabel htmlFor="cover-image">
-              Imagem destacada do artigo
-            </FormLabel>
-            <FormControl>
-              <Input
-                id="cover-image"
-                className="bg-background border border-border rounded-sm box-border pt-1.5"
-                type="file"
-                accept="image/*"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0]
-                  if (!file) return
-                  handleUploadImage(file)
-                }}
-              />
-            </FormControl>
-          </FormItem>
-
-          {/* <FormField
-            shouldUnregister
-            name="coverImage"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="URL pública da imagem de capa (opcional)"
-                    className="text-sm"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
+          {USE_S3 ? (
+            <FormItem>
+              <FormLabel htmlFor="cover-image">
+                Imagem destacada do artigo
+              </FormLabel>
+              <FormControl>
+                <Input
+                  id="cover-image"
+                  className="bg-background border border-border rounded-sm box-border pt-1.5"
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0]
+                    if (!file) return
+                    handleUploadImage(file)
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          ) : (
+            <FormField
+              shouldUnregister
+              name="coverImage"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="URL pública da imagem de capa (opcional)"
+                      className="text-sm"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <FormField
             name="tags"
