@@ -121,7 +121,7 @@ export const ArticleItemPreview = ({
 
   return (
     <>
-      <Card className="group flex w-4xl max-w-full h-full flex-col sm:flex-row overflow-hidden transition-shadow duration-300 group-hover:shadow-lg p-0">
+      <Card className="group flex w-5xl max-w-full h-full flex-col sm:flex-row overflow-hidden transition-shadow duration-300 group-hover:shadow-lg p-0">
         {article.cover_image && (
           <div className="sm:w-2/5 relative h-48 sm:h-auto">
             <Link href={redirectLink} className="flex">
