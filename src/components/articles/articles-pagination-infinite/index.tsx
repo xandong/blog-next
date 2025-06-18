@@ -4,8 +4,6 @@
 import { useState, useEffect, Dispatch, SetStateAction, useRef } from "react"
 import { useInView } from "react-intersection-observer"
 
-import { getArticlesListAction } from "@/app/_actions/articles/get-articles-list"
-
 import { ArticleList } from "../articles-list"
 import { Article } from "@/types/custom"
 import { User } from "@/types/generated"
@@ -18,7 +16,7 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   setArticles: Dispatch<SetStateAction<Article[]>>
   // eslint-disable-next-line no-unused-vars
-  request?: (params: { page: number }) => Promise<{ data?: Article[] }>
+  request: (params: { page: number }) => Promise<{ data?: Article[] }>
 }
 export default function ArticlesPaginationInfinite({
   currentUser,
@@ -32,17 +30,18 @@ export default function ArticlesPaginationInfinite({
   const fetchTimestamps = useRef<number[]>([])
 
   const { ref, inView } = useInView()
-  const getArticlesRequest = request || getArticlesListAction
 
   useEffect(() => {
     if (loading) return
 
     const now = Date.now()
+    fetchTimestamps.current.push(now)
+
     fetchTimestamps.current = fetchTimestamps.current.filter(
-      (ts) => now - ts < 1_000
+      (ts) => now - ts < 3_000
     )
 
-    if (fetchTimestamps.current.length >= 5) {
+    if (fetchTimestamps.current.length > 5) {
       setHasMore(false)
       const timeout = setTimeout(() => {
         setHasMore(true)
@@ -55,9 +54,8 @@ export default function ArticlesPaginationInfinite({
     if (page >= MAX_PAGES || !inView || !hasMore) return
 
     setLoading(true)
-    fetchTimestamps.current.push(now)
 
-    getArticlesRequest({ page: page })
+    request({ page: page })
       .then(({ data: newArticles }) => {
         if (!newArticles || newArticles.length === 0) setHasMore(false)
         else {
@@ -72,7 +70,7 @@ export default function ArticlesPaginationInfinite({
         }
       })
       .finally(() => setLoading(false))
-  }, [inView, hasMore, loading, page, request, getArticlesRequest, setArticles])
+  }, [inView, hasMore, loading, page, request, setArticles])
 
   const onUpdateArticle = (article: Article) => {
     setArticles((prev) => {
