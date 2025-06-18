@@ -33,7 +33,7 @@ Apesar de ter mais experiência com React com Vite, e gerenciamento com Redux. E
 | Qualidade    | ESLint + Prettier + Husky + lint-staged + commits semânticos |
 | Deploy       | Vercel                                                       |
 
-* Obs.: Por ter apenas uma entidade, decidi usar apenas states do React. Outro ponto é, ainda estou procurando uma maneira 'preferida' para lidar com o estados no Next de forma global, já que o Redux não é tão interessante assim para o contexto.
+- Obs.: Por termos poucas entidades e na maioria executamos apenas um GET para buscar suas respectivas listas, decidi usar apenas states do React. Outro ponto é, ainda estou procurando uma maneira 'preferida' para lidar com o estados no Next de forma global, já que o Redux não é tão interessante assim para o contexto.
 
 ---
 
@@ -61,7 +61,7 @@ Apesar de ter mais experiência com React com Vite, e gerenciamento com Redux. E
 
 - Criar novo artigo com campos de título, markdown, imagem e tags;
 - Atualizar artigo existente;
-- ~~Excluir artigo com confirmação.~~ *A api não expõe rotas de delete
+- ~~Excluir artigo com confirmação.~~ \*A api não expõe rotas de delete
 - Trocar o status do artigo com confirmação (draft/publish).
   - (Isso faz o artigo não ser mais visível para edição no nosso App, então não recomendo haha)
 
@@ -69,6 +69,7 @@ Apesar de ter mais experiência com React com Vite, e gerenciamento com Redux. E
 
 - Visualização do artigo renderizado diretamente do Dev.to com dados atualizados;
 - Card para Author do artigo.
+- Card com comentários do artigo.
 
 ### 📱 Responsividade e feedback visual
 
@@ -145,14 +146,14 @@ Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
 ## 📅 Scripts principais
 
-| Comando           | Descrição                      |
-| ----------------- | ------------------------------ |
-| `dev`             | Inicia o servidor local        |
-| `generaty:types`  | Gera a tipagem com OpenAPI     |
-| `lint`            | Roda ESLint                    |
-| `test`            | Roda os testes unitários       |
-| `storybook`       | Inicia Storybook               |
-| `plop`            | Gera componentes com templates |
+| Comando          | Descrição                      |
+| ---------------- | ------------------------------ |
+| `dev`            | Inicia o servidor local        |
+| `generaty:types` | Gera a tipagem com OpenAPI     |
+| `lint`           | Roda ESLint                    |
+| `test`           | Roda os testes unitários       |
+| `storybook`      | Inicia Storybook               |
+| `plop`           | Gera componentes com templates |
 
 ---
 
@@ -184,4 +185,3 @@ Se quiser trocar uma ideia ou dar feedback:
 ---
 
 Feito com ❤️ por Alexandre Gurgel — 2025.
-
