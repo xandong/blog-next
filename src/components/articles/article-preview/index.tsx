@@ -14,7 +14,7 @@ import {
   MessageSquareIcon
 } from "lucide-react"
 
-import { ArticleIndex, ArticleMe, User } from "@/types/generated"
+import { User } from "@/types/generated"
 
 import {
   Card,
@@ -38,6 +38,7 @@ import { updateArticleAction } from "@/app/_actions/articles/update-article"
 import { ArchiveBoxIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/_ui/avatar"
+import { Article } from "@/types/custom"
 
 const ArticleMeta = ({
   icon: Icon,
@@ -54,8 +55,6 @@ const ArticleMeta = ({
     <span className="text-nowrap">{value}</span>
   </div>
 )
-
-type Article = ArticleIndex & ArticleMe
 
 interface ArticlePreviewProps {
   article: Article

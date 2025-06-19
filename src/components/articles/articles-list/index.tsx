@@ -1,8 +1,8 @@
-import { ArticleIndex, ArticleMe, User } from "@/types/generated"
+import { User } from "@/types/generated"
 
 import { ArticleItemPreview } from "../article-preview"
+import { Article } from "@/types/custom"
 
-type Article = ArticleIndex & ArticleMe
 interface ArticleListProps {
   articles: Article[]
   currentUser?: User | null
