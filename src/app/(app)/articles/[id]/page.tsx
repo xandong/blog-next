@@ -33,8 +33,8 @@ export default async function Page({ params }: PageProps) {
         <BackButton />
       </div>
 
-      <div className="max-w-full mx-auto pb-8 gap-8 flex lg:flex-row flex-col items-start ">
-        <Card className="max-w-full">
+      <div className="w-full mx-auto pb-8 gap-8 flex lg:flex-row flex-col items-start ">
+        <Card className="max-w-[60rem] w-full">
           <CardContent>
             <h1 className="md:text-3xl text-xl font-bold text-gray-900 dark:text-white mb-2">
               {article.title}

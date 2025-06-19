@@ -36,9 +36,9 @@ export default async function Page({ params }: PageProps) {
       </div>
 
       <div className="w-full mx-auto pb-8 gap-8 flex lg:flex-row flex-col items-start">
-        <Card className="flex-1">
+        <Card className="max-w-[60rem] w-full">
           <CardContent>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="md:text-3xl text-xl font-bold text-gray-900 dark:text-white mb-2">
               {article.title}
             </h1>
 
@@ -48,7 +48,7 @@ export default async function Page({ params }: PageProps) {
             </div>
 
             {article.cover_image && (
-              <div className="my-6">
+              <div className="my-6 max-w-4xl w-full">
                 <Image
                   src={article.cover_image}
                   alt={article.title}
