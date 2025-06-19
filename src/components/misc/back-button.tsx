@@ -2,7 +2,7 @@
 
 import { useCallback } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
 import { ArrowLeftIcon } from "@phosphor-icons/react"
 
 import { Button } from "../_ui/button"
@@ -13,19 +13,17 @@ interface BackButtonProps {
 }
 
 export const BackButton = ({ href, label }: BackButtonProps) => {
-  const router = useRouter()
-
   const isClient = typeof window !== "undefined"
 
   const handleClick = useCallback(() => {
     if (isClient) {
-      router.back()
+      window.history.back()
 
       return
     }
 
     window.location.href = "/"
-  }, [isClient, router])
+  }, [isClient])
 
   const content = (
     <>

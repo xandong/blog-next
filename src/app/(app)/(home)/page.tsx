@@ -6,7 +6,17 @@ import { Home } from "@/components/pages/home-page"
 
 import { getSession } from "@/lib/session"
 
-export default async function HomeContainer() {
+interface HomePageProps {
+  searchParams: {
+    search?: string
+    tab?: string
+  }
+}
+
+export default async function HomeContainer({ searchParams }: HomePageProps) {
+  const { search, tab } = searchParams
+  console.log({ search, tab })
+
   const { user } = await getSession()
   const { data: articles } = await getArticlesListAction({})
   const { data: latestArticles } = await getLatestArticlesListAction({})
@@ -14,6 +24,8 @@ export default async function HomeContainer() {
   return (
     <AppLayout>
       <Home
+        initialTab={tab === "trending" ? "trending" : "latest"}
+        search={search}
         initialArticles={articles || []}
         initialLatestArticles={latestArticles || []}
         user={user}

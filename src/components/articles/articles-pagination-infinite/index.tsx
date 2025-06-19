@@ -9,7 +9,7 @@ import { Article } from "@/types/custom"
 import { User } from "@/types/generated"
 import { Loader2 } from "lucide-react"
 
-const MAX_PAGES = 100
+const MAX_PAGES = 30
 interface Props {
   currentUser?: User | null
   articles: Article[]
@@ -38,7 +38,7 @@ export default function ArticlesPaginationInfinite({
     fetchTimestamps.current.push(now)
 
     fetchTimestamps.current = fetchTimestamps.current.filter(
-      (ts) => now - ts < 3_000
+      (ts) => now - ts < 1000
     )
 
     if (fetchTimestamps.current.length > 5) {
@@ -46,7 +46,7 @@ export default function ArticlesPaginationInfinite({
       const timeout = setTimeout(() => {
         setHasMore(true)
         fetchTimestamps.current = []
-      }, 15_000)
+      }, 10_000)
 
       return () => clearTimeout(timeout)
     }

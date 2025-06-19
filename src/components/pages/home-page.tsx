@@ -1,25 +1,31 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { Article } from "@/types/custom"
 import { User } from "@/types/generated"
-import { SearchComponent } from "../misc/search-component"
-import ArticlesPaginationInfinite from "../articles/articles-pagination-infinite"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../_ui/tabs"
 import { getMyArticlesListAction } from "@/app/_actions/users/get-my-articles-list"
 import { getLatestArticlesListAction } from "@/app/_actions/articles/get-latest-articles-list"
+
+import ArticlesPaginationInfinite from "../articles/articles-pagination-infinite"
+import { SearchComponent } from "../misc/search-component"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../_ui/tabs"
+import { useQueryParam } from "@/app/hooks/use-search-query"
 
 interface HomeProps {
   initialArticles: Article[]
   initialLatestArticles: Article[]
   user?: User | null
+  initialTab?: "latest" | "trending"
+  search?: string
 }
 
 export const Home = ({
   initialArticles,
   initialLatestArticles,
-  user
+  user,
+  initialTab = "latest",
+  search
 }: HomeProps) => {
   const [articles, setArticles] = useState(initialArticles)
   const [filteredArticles, setFilteredArticles] = useState(articles)
@@ -28,30 +34,29 @@ export const Home = ({
   const [filteredLatestArticles, setFilteredLatestArticles] =
     useState(latestArticles)
 
-  const [showTab, setShowTab] = useState<"latest" | "trending">("latest")
+  const [showTab, setShowTab] = useState<"latest" | "trending">(initialTab)
+  const [, setTabQuery] = useQueryParam(showTab, "tab")
 
   const isEmpty = useMemo(
     () => !initialArticles || initialArticles.length === 0,
     [initialArticles]
   )
 
+  useEffect(() => {
+    setTabQuery(showTab)
+  }, [showTab, setTabQuery])
+
   return (
     <div className="w-full flex flex-col items-center my-6">
-      {showTab === "trending" && (
-        <SearchComponent
-          key={"trending"}
-          initialArticles={articles}
-          setArticles={setFilteredArticles}
-        />
-      )}
-
-      {showTab === "latest" && (
-        <SearchComponent
-          key={"latest"}
-          initialArticles={latestArticles}
-          setArticles={setFilteredLatestArticles}
-        />
-      )}
+      <SearchComponent
+        initialSearch={search}
+        initialArticles={showTab === "trending" ? articles : latestArticles}
+        setArticles={
+          showTab === "trending"
+            ? setFilteredArticles
+            : setFilteredLatestArticles
+        }
+      />
 
       {isEmpty ? (
         <div className="w-full flex justify-center">
@@ -60,24 +65,14 @@ export const Home = ({
       ) : (
         <>
           <div className="w-4xl max-w-full flex justify-end mb-4">
-            <Tabs defaultValue={showTab} className="items-end w-full">
+            <Tabs
+              value={showTab}
+              onValueChange={(e) => setShowTab(e as "latest" | "trending")}
+              className="items-end w-full"
+            >
               <TabsList className="mb-2">
-                <TabsTrigger
-                  value="latest"
-                  onChange={(e) =>
-                    setShowTab(e.currentTarget.value as "latest" | "trending")
-                  }
-                >
-                  Novos
-                </TabsTrigger>
-                <TabsTrigger
-                  value="trending"
-                  onChange={(e) =>
-                    setShowTab(e.currentTarget.value as "latest" | "trending")
-                  }
-                >
-                  Tendências
-                </TabsTrigger>
+                <TabsTrigger value="latest">Novos</TabsTrigger>
+                <TabsTrigger value="trending">Tendências</TabsTrigger>
               </TabsList>
 
               <TabsContent

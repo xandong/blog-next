@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { SearchIcon, XIcon } from "lucide-react"
 import { useDebounce } from "use-debounce"
 
+import { useQueryParam } from "@/app/hooks/use-search-query"
 import { Article } from "@/types/custom"
 import { Input } from "../_ui/input"
 
@@ -11,19 +12,28 @@ interface SearchComponentProps {
   setArticles: Dispatch<SetStateAction<Article[]>>
   initialArticles: Article[]
   label?: string
+  initialSearch?: string
 }
 
 export const SearchComponent = ({
   label,
   setArticles,
-  initialArticles
+  initialArticles,
+  initialSearch = ""
 }: SearchComponentProps) => {
-  const [searchValue, setSearchValue] = useState("")
+  useEffect(() => {
+    setSearchValue(initialSearch || "")
+  }, [initialSearch])
+
+  const [, setSearch] = useQueryParam(initialSearch, "search")
+
+  const [searchValue, setSearchValue] = useState(initialSearch)
   const [value] = useDebounce(searchValue, 1000)
 
   useEffect(() => {
     if (!value?.trim()) {
       setArticles(initialArticles)
+      setSearch("")
       return
     }
 
@@ -44,7 +54,8 @@ export const SearchComponent = ({
     })
 
     setArticles(filtered)
-  }, [initialArticles, setArticles, value])
+    setSearch(value)
+  }, [initialArticles, setArticles, setSearch, value])
 
   return (
     <div className="max-w-xl w-full flex flex-row justify-center mb-6">
