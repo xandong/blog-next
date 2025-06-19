@@ -37,12 +37,21 @@ export const Home = ({
 
   return (
     <div className="w-full flex flex-col items-center my-6">
-      <SearchComponent
-        setArticles={
-          showTab === "latest" ? setLatestArticles : setFilteredArticles
-        }
-        initialArticles={showTab === "latest" ? latestArticles : articles}
-      />
+      {showTab === "trending" && (
+        <SearchComponent
+          key={"trending"}
+          initialArticles={articles}
+          setArticles={setFilteredArticles}
+        />
+      )}
+
+      {showTab === "latest" && (
+        <SearchComponent
+          key={"latest"}
+          initialArticles={latestArticles}
+          setArticles={setFilteredLatestArticles}
+        />
+      )}
 
       {isEmpty ? (
         <div className="w-full flex justify-center">
@@ -51,7 +60,7 @@ export const Home = ({
       ) : (
         <>
           <div className="w-4xl max-w-full flex justify-end mb-4">
-            <Tabs defaultValue={showTab} className="items-end">
+            <Tabs defaultValue={showTab} className="items-end w-full">
               <TabsList className="mb-2">
                 <TabsTrigger
                   value="latest"
@@ -71,16 +80,22 @@ export const Home = ({
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="latest">
+              <TabsContent
+                value="latest"
+                className="w-full flex justify-center"
+              >
                 <ArticlesPaginationInfinite
                   articles={filteredLatestArticles}
-                  setArticles={setFilteredLatestArticles}
+                  setArticles={setLatestArticles}
                   currentUser={user}
                   request={getLatestArticlesListAction}
                 />
               </TabsContent>
 
-              <TabsContent value="trending">
+              <TabsContent
+                value="trending"
+                className="w-full flex justify-center"
+              >
                 <ArticlesPaginationInfinite
                   articles={filteredArticles}
                   setArticles={setArticles}

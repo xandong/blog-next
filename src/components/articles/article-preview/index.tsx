@@ -35,7 +35,7 @@ import {
 } from "@/components/_ui/menubar"
 import { ConfirmationDialog } from "@/components/misc/confirmation-dialog"
 import { updateArticleAction } from "@/app/_actions/articles/update-article"
-import { ArchiveBoxIcon } from "@phosphor-icons/react"
+import { ArchiveBoxIcon, ShareIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/_ui/avatar"
 import { Article } from "@/types/custom"
@@ -190,6 +190,14 @@ export const ArticleItemPreview = ({
                       </MenubarTrigger>
 
                       <MenubarContent className="mr-6 max-w-24 w-full">
+                        <Link href={`/articles/${article.id}`}>
+                          <MenubarItem className="gap-0.5">
+                            <ShareIcon className="mr-2 h-4 w-4" />
+
+                            <span>Preview</span>
+                          </MenubarItem>
+                        </Link>
+
                         {isArchived && (
                           <MenubarItem
                             onClick={handleConfirmUnpublish}

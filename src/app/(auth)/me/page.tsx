@@ -14,7 +14,7 @@ export default async function Page() {
 
   return (
     <AppLayout>
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex justify-between items-center mb-2">
         <BackButton />
 
         <Link href="/create">
