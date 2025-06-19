@@ -15,6 +15,7 @@ import { Input } from "@/components/_ui/input"
 import { Badge } from "../_ui/badge"
 
 interface MultiSelectProps {
+  initialData: string[]
   label?: string
   list: { value: string; label: string; color?: string; bgColor?: string }[]
   onChange: (value: string[]) => void
@@ -26,11 +27,18 @@ export const MultiSelect = React.forwardRef<
   MultiSelectProps
 >(
   (
-    { list, label = "Selecione as opções...", onChange, maxSelections = 3 },
+    {
+      list,
+      label = "Selecione as opções...",
+      onChange,
+      maxSelections = 3,
+      initialData = []
+    },
     ref
   ) => {
     const [open, setOpen] = React.useState(false)
-    const [selectedValues, setSelectedValues] = React.useState<string[]>([])
+    const [selectedValues, setSelectedValues] =
+      React.useState<string[]>(initialData)
     const [searchValue, setSearchValue] = React.useState("")
 
     const filteredList = React.useMemo(() => {

@@ -15,7 +15,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <AppLayout>
-      <div className="w-full flex justify-between">
+      <div className="w-full flex justify-between items-center">
         <BackButton />
 
         <div>
