@@ -2,7 +2,6 @@ import { getArticleByPathAction } from "@/app/_actions/articles/get-article-by-p
 import { getCommentsByArticleAction } from "@/app/_actions/comments/get-comments-by-article"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/_ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/_ui/card"
-import { Separator } from "@/components/_ui/separator"
 import { AppLayout } from "@/components/layout/app-layout"
 import { BackButton } from "@/components/misc/back-button"
 import { Markdown } from "@/components/misc/markdown"
@@ -85,47 +84,42 @@ export default async function Page({ params }: PageProps) {
               </CardTitle>
             </CardHeader>
 
-            <Separator />
-
             <CardContent className="space-y-6">
-              {comments.map((comment, index) => (
-                <div
-                  key={comment.id_code}
-                  className="flex flex-col gap-4 w-full"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="flex-shrink-0">
-                        <Avatar>
-                          <AvatarImage
-                            src={comment.user.profile_image || ""}
-                            alt={comment.user.name || ""}
-                            width={40}
-                            height={40}
-                          />
-                          <AvatarFallback>
-                            {comment.user.name
-                              ?.slice(0, 2)
-                              .toLocaleUpperCase() || "UU"}
-                          </AvatarFallback>
-                        </Avatar>
+              {comments.map((comment) => (
+                <div key={comment.id_code}>
+                  <div className="flex flex-col gap-4 w-full bg-background p-4 rounded-xl border-secondary border-b">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-shrink-0">
+                          <Avatar>
+                            <AvatarImage
+                              src={comment.user.profile_image || ""}
+                              alt={comment.user.name || ""}
+                              width={40}
+                              height={40}
+                            />
+                            <AvatarFallback>
+                              {comment.user.name
+                                ?.slice(0, 2)
+                                .toLocaleUpperCase() || "UU"}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+
+                        <span className="font-medium text-sm text-foreground">
+                          {comment.user.name}
+                        </span>
                       </div>
 
-                      <span className="font-medium text-sm text-foreground">
-                        {comment.user.name}
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(comment.created_at).toLocaleDateString()}
                       </span>
                     </div>
 
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(comment.created_at).toLocaleDateString()}
-                    </span>
+                    <div className="prose prose-sm dark:prose-invert max-w-none -mb-10 -mt-12">
+                      <Markdown markdownContent={comment.body_html} />
+                    </div>
                   </div>
-
-                  <div className="prose prose-sm dark:prose-invert max-w-none -mb-10 -mt-12">
-                    <Markdown markdownContent={comment.body_html} />
-                  </div>
-
-                  {index < comments.length - 1 && <Separator />}
                 </div>
               ))}
             </CardContent>

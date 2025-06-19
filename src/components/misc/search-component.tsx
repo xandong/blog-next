@@ -50,6 +50,7 @@ export const SearchComponent = ({
     <div className="max-w-xl w-full flex flex-row justify-center mb-6">
       <div className="w-full">
         <Input
+          className="bg-primary-foreground/20"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder={
