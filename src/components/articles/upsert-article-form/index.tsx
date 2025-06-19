@@ -49,7 +49,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
     defaultValues: {
       title: article?.title || "",
       coverImage: article?.cover_image || "",
-      tags: article?.tag_list || [],
+      tags: article?.tags || [],
       content: article?.body_markdown || ""
     }
   })
@@ -211,6 +211,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
               <FormItem>
                 <FormControl>
                   <MultiSelect
+                    initialData={field.value}
                     {...field}
                     maxSelections={4}
                     label="Selecione até 4 tags"
@@ -238,7 +239,7 @@ export const UpsertArticleForm = ({ article }: { article?: Article }) => {
                     {...field}
                     style={{ fontSize: "1.5rem" }}
                     placeholder="Insira o título..."
-                    className="border-0 shadow-none font-bold placeholder:font-bold placeholder:text-2xl ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 "
+                    className="bg-transparent! border-0 shadow-none font-bold placeholder:font-bold placeholder:text-2xl ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 "
                   />
                 </FormControl>
 

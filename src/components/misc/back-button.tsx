@@ -35,7 +35,7 @@ export const BackButton = ({ href, label }: BackButtonProps) => {
   )
 
   return (
-    <div className="my-2">
+    <div className="mb-2">
       {href ? (
         <Link href={href} prefetch>
           <Button
